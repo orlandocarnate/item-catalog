@@ -1,11 +1,21 @@
 # Insert imports here
-from flask import Flask
-from flask_sqlalchemy import SQLAlchemy
-from flask import render_template, url_for, flash, redirect, app
+from flask import Flask, render_template, request, redirect, url_for, flash, app
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
+
+# Import columns from db_setup.py
+from db_setup import Base, User, Category, Jewelry
+
 
 app = Flask(__name__)
 
 # DB connection
+engine = create_engine('sqlite:///restaurantmenu.db')
+Base.metadata.bind = engine
+
+DBSession - sessionmaker(bind=engine)
+session = DBSession()
+
 
 # Sample Dictionary for DB
 categories = [
@@ -61,9 +71,13 @@ def register():
     return "<h1>Register Page<h1>"
 
 # Single Category - All Items; Category Image
-#@app.route("/category/<int:category_id>/")
-#def register():
-#    return "<h1>Category Page<h1>"
+# list category items by category name
+@app.route("/<string:category_name>/")
+def categoryItems(category_name):
+    category = session.query(Category).filter_by(name = category_name).one()
+    items = session.query(Jewelry). filter_by(category_name = category_name)
+
+    return render_template('category_basic.html', category_name = category_name, items = items)
 
 # New Category - Default Image or Upload Image
 @app.route("/newcategory")
@@ -77,8 +91,12 @@ def newCategory():
 
 
 # New Product - Default Image or Upload Image
-#@app.route("/category/<int:category_id>/new_product")
-#def newProduct()):
+@app.route("<string:category_name>/new", methods=['GET,'POST'])
+def newProduct(category_name)):
+    category = session.query(Category).filter_by(name = category_name).one()
+    if request.method == 'POST':
+        # category_id is the linked foreign key for jewelry table
+        newItem = Jewelry(name = request.form['name'], price = request.form['price'], description = request.form['description'], category_id = category_id) 
     return "<h1>New Product Page<h1>"
 
 
