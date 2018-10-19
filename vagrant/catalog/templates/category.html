@@ -1,14 +1,14 @@
 <html>
     <body>
-        <h1>{{ category.name }}</h1>
+        <h1>{{ category }}</h1>
 
         {% for item in items %}
             <p>
                 {{ item.name }} </br>
                 {{ item.price }} </br>
                 {{ item.description }} </br>
-                <a href='{{ url_for('editJewelryItem', cateory_name = category.name, jewelry_id = item.id ) }}'>Edit</a></br>
-                <a href='{{ url_for('deleteJewelryItem', cateory_name = category.name, jewelry_id = item.id ) }}'>Edit</a></br>
+                <a href='#'>Edit</a></br>
+                <a href='#'>Delete</a></br>
             </p>
         {% endfor %}
     </body>

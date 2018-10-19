@@ -29,17 +29,18 @@
                     <h3 class="w3-wide"><b>LOGO</b></h3>
                 </div>
                 <div class="w3-padding-64 w3-large w3-text-grey" style="font-weight:bold">
-                    <a href="#" class="w3-bar-item w3-button">Shirts</a>
-                    <a href="#" class="w3-bar-item w3-button">Dresses</a>
+                    {% for category in categories %}
+                    <a href="{{ url_for('categoryPage', category_name = category.name) }}" class="w3-bar-item w3-button">{{ category.name }}</a>
+                    {% endfor %}
                     <a onclick="myAccFunc()" href="javascript:void(0)" class="w3-button w3-block w3-white w3-left-align" id="myBtn">
                     Jeans <i class="fa fa-caret-down"></i>
                     </a>
-                    <div id="demoAcc" class="w3-bar-block w3-hide w3-padding-large w3-medium">
-                    <a href="#" class="w3-bar-item w3-button w3-light-grey"><i class="fa fa-caret-right w3-margin-right"></i>Skinny</a>
-                    <a href="#" class="w3-bar-item w3-button">Relaxed</a>
-                    <a href="#" class="w3-bar-item w3-button">Bootcut</a>
-                    <a href="#" class="w3-bar-item w3-button">Straight</a>
-                    </div>
+                        <div id="demoAcc" class="w3-bar-block w3-hide w3-padding-large w3-medium">
+                            <a href="#" class="w3-bar-item w3-button w3-light-grey"><i class="fa fa-caret-right w3-margin-right"></i>Skinny</a>
+                            <a href="#" class="w3-bar-item w3-button">Relaxed</a>
+                            <a href="#" class="w3-bar-item w3-button">Bootcut</a>
+                            <a href="#" class="w3-bar-item w3-button">Straight</a>
+                        </div>
                     <a href="#" class="w3-bar-item w3-button">Jackets</a>
                     <a href="#" class="w3-bar-item w3-button">Gymwear</a>
                     <a href="#" class="w3-bar-item w3-button">Blazers</a>

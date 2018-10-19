@@ -47,16 +47,7 @@ class Jewelry(Base):
     category = relationship(Category)
 
     # NEED TO RESEARCH THIS Create JSON format 
-    @property
-    def serialize(self):
-        # Returns object data in easily serializeable format
-        return {
-            'name' : self.name,
-            'description' : self.description,
-            'id' : self.id,
-            'price' : self.price,
-            'jewelry' : self.jewelry,
-        }
+
 
 ### Ending CONFIGURATION ###
 

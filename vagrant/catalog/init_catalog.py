@@ -20,26 +20,25 @@ session = DBSession()
 # Create Entries
 earrings = Category(name = 'Earrings')
 # use session.add to add object myFirstCategory to staging zone before commit
-session.add(category1)
+session.add(earrings)
 
 # commit to database
 session.commit()
 
-# ADD Jewelry item
+# ADD Earring item
 earringItem = Jewelry(name = 'The Alyssa Earrings', 
-                        description = '', 
                         price = '$11.99', 
                         category = earrings)
 
 # add item
-session.add(jewelryItem1)
+session.add(earringItem)
 
 # commit to db
 session.commit()
 
 # Below are more categories
 necklaces = Category(name = 'Necklaces')
-session.add(nacklaces)
+session.add(necklaces)
 session.commit()
 
 bracelets = Category(name = 'Bracelets')
@@ -54,35 +53,55 @@ session.commit()
 
 # EARRINGS
 earringItem = Jewelry(name = 'Athena Earrings', 
-                        description = '', 
                         price = '$11.99', 
                         category = earrings)
 session.add(earringItem)
 session.commit()
 
 earringItem = Jewelry(name = 'Audrey Earrings', 
-                        description = '', 
                         price = '$11.99', 
                         category = earrings)
 session.add(earringItem)
 session.commit()
 
 # NECKLACES
-necklaceItem = Jewelry(name = 'The Gina Necklace', 
-                        description = '', 
-                        price = '$23.99', 
+necklaceItem = Jewelry(name = 'The Ella Necklace',
+                        price = '$23.99',
                         category = necklaces)
 session.add(necklaceItem)
 session.commit()
 
-necklaceItem = Jewelry(name = 'The Grace Necklace', 
-                        description = '', 
+necklaceItem = Jewelry(name = 'The Grace Necklace',
                         price = '$66.99', 
                         category = necklaces)
 session.add(necklaceItem)
 session.commit()
 
+# Bracelets
+braceletItem = Jewelry(name = 'The Alyssa Bracelet',
+                        price = '$25.99', 
+                        category = bracelets)
+session.add(braceletItem)
+session.commit()
 
+braceletItem = Jewelry(name = 'The Amariah Bracelet',
+                        price = '$34.99', 
+                        category = bracelets)
+session.add(braceletItem)
+session.commit()
+
+# Anklets
+ankletItem = Jewelry(name = 'The Brittnet Anklet',
+                        price = '$25.99', 
+                        category = anklets)
+session.add(ankletItem)
+session.commit()
+
+ankletItem = Jewelry(name = 'The Cameron Anklet',
+                        price = '$24.99', 
+                        category = anklets)
+session.add(ankletItem)
+session.commit()
 
 
 
