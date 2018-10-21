@@ -1,0 +1,14 @@
+{% extends "layout.html" %}
+{% block content %}
+        <h1>Home Page</h1>
+
+        {% for category in categories %}
+            <p>
+                {{ category.name }} </br>
+                {{ category.price }} </br>
+                {{ category.description }} </br>
+                <a href='#'>Edit</a></br>
+                <a href='#'>Delete</a></br>
+            </p>
+        {% endfor %}
+{% endblock content %}

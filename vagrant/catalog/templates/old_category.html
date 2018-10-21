@@ -1,0 +1,15 @@
+<html>
+    <body>
+        <h1>{{ category.name }}</h1>
+
+        {% for item in items %}
+            <p>
+                {{ item.name }} </br>
+                {{ item.price }} </br>
+                {{ item.description }} </br>
+                <a href='#'>Edit</a></br>
+                <a href='#'>Delete</a></br>
+            </p>
+        {% endfor %}
+    </body>
+</html>

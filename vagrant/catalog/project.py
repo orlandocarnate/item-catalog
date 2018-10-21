@@ -48,7 +48,12 @@ def categoryPage(category_name):
     #output = "<h1>" + category1.name + "</h1>"
     #return output
 
-
+# Single Item - Single; Item Image
+@app.route("/<int:item_id>/")
+def itemPage(item_id):
+    item = session.query(Jewelry).filter_by(id = item_id).one()
+    output = "<h1>" + item.name + "</h1>"
+    return output
 
 '''
 # New Category - Default Image or Upload Image

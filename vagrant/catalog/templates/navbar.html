@@ -1,0 +1,21 @@
+<!-- LOOP CATEGORIES INTO NAV BAR -->
+<nav class="navbar navbar-expand-md tm-main-nav-container">
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#tmMainNav" aria-controls="tmMainNav" aria-expanded="false" aria-label="Toggle navigation">
+                <i class="fa fa-bars"></i>
+        </button>
+
+        <!-- LOOP CATEGORIES INTO NAV BAR -->
+        <div class="collapse navbar-collapse tm-main-nav" id="tmMainNav">
+            <ul class="nav nav-fill tm-main-nav-ul">
+                <li class="nav-item"><a class="nav-link active" href="index.html">Home</a></li>
+
+                <!-- LOOP CATEGORIES INTO NAV BAR -->
+                {% for category in categories %}
+                <li class="nav-item"><a class="nav-link" href="{{ url_for('categoryPage', category_name = category.name) }}">{{ category.name }}</a></li>
+                {% endfor %}
+                <!-- END LOOP -->
+
+                <li class="nav-item"><a class="nav-link" href="contact.html">Contact Us</a></li>
+            </ul>
+        </div>
+</nav>
