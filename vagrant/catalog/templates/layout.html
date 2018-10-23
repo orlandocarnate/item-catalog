@@ -48,7 +48,7 @@ http://www.tooplate.com/view/2092-shelf
                     <!-- LOOP CATEGORIES INTO NAV BAR -->
                     <div class="collapse navbar-collapse tm-main-nav" id="tmMainNav">
                         <ul class="nav nav-fill tm-main-nav-ul">
-                            <li class="nav-item"><a class="nav-link active" href="index.html">Home</a></li>
+                            <li class="nav-item"><a class="nav-link active" href="{{ url_for('home') }}">Home</a></li>
 
                             <!-- LOOP CATEGORIES INTO NAV BAR -->
                             {% for category in categories %}

@@ -43,43 +43,44 @@ def categoryPage(category_name):
     category = session.query(Category).filter_by(name = category_name).one()
     items = session.query(Jewelry).filter_by(category = category)
 
-    return render_template('category.html', category = category.name, items = items)
+    return render_template('category.html', category = category, items = items)
 
-    #output = "<h1>" + category1.name + "</h1>"
-    #return output
+
+# NEW ITEM
+@app.route("/<string:category_name>/new/", methods=['GET','POST'])
+def newItem(category_name):
+    category = session.query(Category).filter_by(name = category_name).one()
+    if request.method == 'POST':
+        newJewelryItem = Jewelry(name=request.form['name'], category_id = category.id)
+        session.add(newJewelryItem)
+        session.commit()
+        return redirect(url_for('categoryPage', category_name = category_name))
+    else:
+        return render_template('newitem.html', category = category)
+
 
 # Single Item - Single; Item Image
 @app.route("/<int:item_id>/")
 def itemPage(item_id):
     item = session.query(Jewelry).filter_by(id = item_id).one()
-    output = "<h1>" + item.name + "</h1>"
+    category_id = item.category_id
+    category = session.query(Category).filter_by(id = category_id).one()
+    return render_template('item.html', item = item, category = category)
+
+# EDIT Item - Add GET & POST Methods
+@app.route("/<int:item_id>/edit", methods=['GET','POST'])
+def editItem(item_id):
+    item = session.query(Jewelry).filter_by(id = item_id).one()
+    output = "<h1>EDIT " + item.name + " Page</h1>"
     return output
 
-'''
-# New Category - Default Image or Upload Image
-@app.route("/newcategory")
-def newCategory():
-    return "<h1>New Category Page<h1>"
+# DELETE ITEM
+@app.route("/<int:item_id>/delete", methods=['GET','POST'])
+def deleteItem(item_id):
+    item = session.query(Jewelry).filter_by(id = item_id).one()
+    output = "<h1>DELETE " + item.name + " Page</h1>"
+    return output
 
-
-
-
-# New Product - Default Image or Upload Image
-@app.route("/<string:category_name>/new", methods=['GET','POST'])
-def newProduct(category_name):
-    category = session.query(Category).filter_by(name = category_name).one()
-    if request.method == 'POST':
-        # category_id is the linked foreign key for jewelry table
-        newItem = Jewelry(name = request.form['name'], price = request.form['price'], description = request.form['description'], category_id = category_id) 
-        # stage the newItem variable before committing to DB using session.add
-        session.add(newItem)
-        # commit to DB
-        session.commit()
-        # run the categoryPage() to return to the category's main page        
-        return redirect(url_for('categoryPage', category_name = category_name))
-    else:
-        return render_template('newitem.html', category_name = category_name, items = items)
-'''
 
 # About Page
 @app.route("/about")

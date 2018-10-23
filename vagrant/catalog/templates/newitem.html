@@ -1,14 +1,10 @@
 <html>
     <body>
-        <h1>New Item for {{ category_name }}</h1>
-
-        <form action="{{ url_for('newItem', category_id=category_id )}}", method='post'>
+        <h1>New Item for {{ category.name }} with ID {{ category.id }}</h1>
+        
+        <form action="{{ url_for('newItem', category_name=category.name) }}" method='post'>
             <p>Name:</p>
                 <input type='text' size='30' name='name'>
-            <p>Price:</p>
-                <input type='text' size='8' name='price'>
-            <p>Description:</p>
-                <textarea cols='40' rows='4' name='description'></textarea>
             <input type='submit' value='Create'>
         </form>
 
