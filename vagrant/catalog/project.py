@@ -16,6 +16,8 @@ Base.metadata.bind = engine
 DBSession = sessionmaker(bind=engine)
 session = DBSession()
 
+# make categories GLOBAL
+categories = session.query(Category).all()
 
 # app.routes here
 
@@ -23,7 +25,7 @@ session = DBSession()
 @app.route("/")
 @app.route("/home")
 def home():
-    categories = session.query(Category).all()
+
     return render_template('home.html', categories = categories)
 
 # Login
@@ -40,15 +42,17 @@ def register():
 # list category items by category name
 @app.route("/<string:category_name>/")
 def categoryPage(category_name):
+    category_name = category_name.title()
     category = session.query(Category).filter_by(name = category_name).one()
     items = session.query(Jewelry).filter_by(category = category)
 
-    return render_template('category.html', category = category, items = items)
+    return render_template('category.html', category = category, items = items, categories = categories)
 
 
 # NEW ITEM
 @app.route("/<string:category_name>/new/", methods=['GET','POST'])
 def newItem(category_name):
+    category_name = category_name.title()
     category = session.query(Category).filter_by(name = category_name).one()
     if request.method == 'POST':
         newJewelryItem = Jewelry(name=request.form['name'], category_id = category.id)
@@ -70,9 +74,19 @@ def itemPage(item_id):
 # EDIT Item - Add GET & POST Methods
 @app.route("/<int:item_id>/edit", methods=['GET','POST'])
 def editItem(item_id):
-    item = session.query(Jewelry).filter_by(id = item_id).one()
-    output = "<h1>EDIT " + item.name + " Page</h1>"
-    return output
+    editJewelryItem = session.query(Jewelry).filter_by(id = item_id).one()
+    if request.method == 'POST':
+        if request.form['name']:
+            editJewelryItem.name = request.form['name']
+        if request.form['description']:
+            editJewelryItem.description = request.form['description']
+        if request.form['price']:
+            editJewelryItem.price = request.form['price']
+        session.add(editJewelryItem)
+        session.commit()
+        return redirect(url_for('itemPage', item_id = item_id))
+    else:
+        return render_template('edititem.html', item = editJewelryItem)
 
 # DELETE ITEM
 @app.route("/<int:item_id>/delete", methods=['GET','POST'])
