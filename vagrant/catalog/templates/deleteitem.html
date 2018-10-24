@@ -2,10 +2,10 @@
     <body>
         <h1>You are about to Delete {{ item.name }}!!!</h1>
 
-        <form action="{{ url_for('deleteItem', item_id = item.id) }}", method='post'>
+        <form action="{{ url_for('deleteItem', category_name = category_name, item_id = item.id) }}", method='post'>
             <p>Are you sure you want to delete {{ item.name }}?</p>
             <input type='submit' value='Delete'>
-            <a href='{{ url_for('itemPage', item_id = item.id) }}'>Cancel</a>
+            <a href='{{ url_for('itemPage', category_name = category_name, item_id = item.id) }}'>Cancel</a>
         </form>
 
     </body>

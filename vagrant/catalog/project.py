@@ -1,5 +1,5 @@
 # Insert imports here
-from flask import Flask, render_template, request, redirect, url_for, flash, app
+from flask import Flask, render_template, request, redirect, url_for, flash, app, jsonify
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
@@ -38,6 +38,26 @@ def login():
 def register():
     return "<h1>Register Page<h1>"
 
+# list Categories in JSON format
+@app.route('/JSON')
+def homeJSON():
+    return jsonify(Category=[i.serialize for i in categories])
+
+# list Category items in JSON format
+@app.route('/<string:category_name>/JSON')
+def categoryJSON(category_name):
+    category_name = category_name.title()
+    category = session.query(Category).filter_by(name = category_name).one()
+    items = session.query(Jewelry).filter_by(
+        category_id=category.id).all()
+    return jsonify(Jewelry=[i.serialize for i in items])
+
+# list single item in JSON format
+@app.route('/<string:category_name>/<int:item_id>/JSON')
+def itemJSON(category_name, item_id):
+    item = session.query(Jewelry).filter_by(id = item_id).one()
+    return jsonify(Jewelry=item.serialize)
+
 # Single Category - All Items; Category Image
 # list category items by category name
 @app.route("/<string:category_name>/")
@@ -65,16 +85,16 @@ def newItem(category_name):
 
 
 # Single Item - Single; Item Image
-@app.route("/<int:item_id>/")
-def itemPage(item_id):
+@app.route("/<string:category_name>/<int:item_id>/")
+def itemPage(category_name, item_id):
     item = session.query(Jewelry).filter_by(id = item_id).one()
     category_id = item.category_id
     category = session.query(Category).filter_by(id = category_id).one()
-    return render_template('item.html', item = item, category_name = category.name)
+    return render_template('item.html', item = item, category = category)
 
 # EDIT Item - Add GET & POST Methods
-@app.route("/<int:item_id>/edit", methods=['GET','POST'])
-def editItem(item_id):
+@app.route("/<string:category_name>/<int:item_id>/edit", methods=['GET','POST'])
+def editItem(category_name, item_id):
     editJewelryItem = session.query(Jewelry).filter_by(id = item_id).one()
     if request.method == 'POST':
         if request.form['name']:
@@ -86,13 +106,13 @@ def editItem(item_id):
         session.add(editJewelryItem)
         session.commit()
         flash('Item has been edited!')
-        return redirect(url_for('itemPage', item_id = item_id))
+        return redirect(url_for('itemPage', category_name = category_name, item_id = item_id))
     else:
-        return render_template('edititem.html', item = editJewelryItem)
+        return render_template('edititem.html', category_name = category_name, item = editJewelryItem)
 
 # DELETE ITEM
-@app.route("/<int:item_id>/delete", methods=['GET','POST'])
-def deleteItem(item_id):
+@app.route("/<string:category_name>/<int:item_id>/delete", methods=['GET','POST'])
+def deleteItem(category_name, item_id):
     deleteItem = session.query(Jewelry).filter_by(id = item_id).one()
     category_id = deleteItem.category_id
     category = session.query(Category).filter_by(id = category_id).one()
@@ -102,7 +122,7 @@ def deleteItem(item_id):
         flash('Item has been deleted!')
         return redirect(url_for('categoryPage', category_name = category.name))
     else:
-        return render_template('deleteitem.html', item = deleteItem)
+        return render_template('deleteitem.html', category_name = category_name, item = deleteItem)
 
 
 # About Page

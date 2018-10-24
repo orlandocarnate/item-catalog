@@ -27,6 +27,15 @@ class Category(Base):
     # MAPPER CODE - define columns for category table
     id = Column(Integer, primary_key=True)
     name = Column(String(250), nullable=False)
+    
+    # JSON Configuration
+    @property
+    def serialize(self):
+
+        return {
+            'id': self.id,
+            'name': self.name,
+        }
 
 class Jewelry(Base):
     # Assign TABLE name
@@ -46,7 +55,16 @@ class Jewelry(Base):
     #Establish relationship with other table
     category = relationship(Category)
 
-    # NEED TO RESEARCH THIS Create JSON format 
+    # JSON Configuration
+    @property
+    def serialize(self):
+
+        return {
+            'id': self.id,
+            'name': self.name,
+            'description': self.description,
+            'price': self.price,
+        }
 
 
 ### Ending CONFIGURATION ###
