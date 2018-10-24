@@ -9,6 +9,17 @@
                         <img src="{{ url_for('static',filename='img/image-05-preview.jpg') }}" alt="Image" class="img-fluid tm-img-center-sm">
                     </div>
                     <div class="col-md-6 col-sm-12">
+                        <p>
+                            {% with messages =  get_flashed_messages() %}
+                                {% if messages %}
+                                    <ul>
+                                        {% for message in messages %}
+                                        <li><strong>{{ message }}</strong></li>
+                                        {% endfor %}
+                                    </ul>
+                                {% endif %}
+                            {% endwith %}
+                        </p>
                         <h2 class="tm-blue-text tm-margin-b-p">{{ category.name }}</h2>
                         <p class="tm-margin-b-p">Suspendisse suscipit tortor eu nunc fermentum pellentesque. Donec vaius diam ut velit porttitor accumsan. Cras ac porttitor urna, in vehicula diam. Ut ultricies leo dapibus, facilisis justo vel, dignissim tortor.</p>
                         <p class="tm-margin-b-p">Ut iaculis vel libero a auctor. Integer arcu orci, vaius id velit sed, lacinia venenatis felis. Integer in facilisis tortor. Vivamus facilisis mattis finibus. Vestibulum in aliquam nisl. Nunc pretium elementum posuere.</p>

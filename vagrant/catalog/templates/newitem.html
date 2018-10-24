@@ -1,11 +1,12 @@
 <html>
     <body>
-        <h1>New Item for {{ category.name }} with ID {{ category.id }}</h1>
+        <h1>New Item for the {{ category.name }} category.</h1>
         
         <form action="{{ url_for('newItem', category_name=category.name) }}" method='post'>
             <p>Name:</p>
                 <input type='text' size='30' name='name'>
             <input type='submit' value='Create'>
+            <a href='{{ url_for('categoryPage', category_name=category.name) }}'>Cancel</a>
         </form>
 
     </body>

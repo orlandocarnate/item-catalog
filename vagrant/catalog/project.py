@@ -58,6 +58,7 @@ def newItem(category_name):
         newJewelryItem = Jewelry(name=request.form['name'], category_id = category.id)
         session.add(newJewelryItem)
         session.commit()
+        flash('New Jewelry Item Created!')
         return redirect(url_for('categoryPage', category_name = category_name))
     else:
         return render_template('newitem.html', category = category)
@@ -84,6 +85,7 @@ def editItem(item_id):
             editJewelryItem.price = request.form['price']
         session.add(editJewelryItem)
         session.commit()
+        flash('Item has been edited!')
         return redirect(url_for('itemPage', item_id = item_id))
     else:
         return render_template('edititem.html', item = editJewelryItem)
@@ -97,6 +99,7 @@ def deleteItem(item_id):
     if request.method == 'POST':
         session.delete(deleteItem)
         session.commit()
+        flash('Item has been deleted!')
         return redirect(url_for('categoryPage', category_name = category.name))
     else:
         return render_template('deleteitem.html', item = deleteItem)
