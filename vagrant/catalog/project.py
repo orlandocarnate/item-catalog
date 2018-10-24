@@ -69,7 +69,7 @@ def itemPage(item_id):
     item = session.query(Jewelry).filter_by(id = item_id).one()
     category_id = item.category_id
     category = session.query(Category).filter_by(id = category_id).one()
-    return render_template('item.html', item = item, category = category)
+    return render_template('item.html', item = item, category_name = category.name)
 
 # EDIT Item - Add GET & POST Methods
 @app.route("/<int:item_id>/edit", methods=['GET','POST'])
@@ -91,9 +91,15 @@ def editItem(item_id):
 # DELETE ITEM
 @app.route("/<int:item_id>/delete", methods=['GET','POST'])
 def deleteItem(item_id):
-    item = session.query(Jewelry).filter_by(id = item_id).one()
-    output = "<h1>DELETE " + item.name + " Page</h1>"
-    return output
+    deleteItem = session.query(Jewelry).filter_by(id = item_id).one()
+    category_id = deleteItem.category_id
+    category = session.query(Category).filter_by(id = category_id).one()
+    if request.method == 'POST':
+        session.delete(deleteItem)
+        session.commit()
+        return redirect(url_for('categoryPage', category_name = category.name))
+    else:
+        return render_template('deleteitem.html', item = deleteItem)
 
 
 # About Page
