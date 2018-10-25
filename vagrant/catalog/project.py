@@ -209,6 +209,8 @@ def categoryPage(category_name):
 # NEW ITEM
 @app.route("/<string:category_name>/new/", methods=['GET','POST'])
 def newItem(category_name):
+    if 'username' not in login_session:
+        return redirect('/login')
     category_name = category_name.title()
     category = session.query(Category).filter_by(name = category_name).one()
     if request.method == 'POST':
@@ -232,6 +234,8 @@ def itemPage(category_name, item_id):
 # EDIT Item - Add GET & POST Methods
 @app.route("/<string:category_name>/<int:item_id>/edit", methods=['GET','POST'])
 def editItem(category_name, item_id):
+    if 'username' not in login_session:
+        return redirect('/login')
     editJewelryItem = session.query(Jewelry).filter_by(id = item_id).one()
     if request.method == 'POST':
         if request.form['name']:
@@ -250,6 +254,8 @@ def editItem(category_name, item_id):
 # DELETE ITEM
 @app.route("/<string:category_name>/<int:item_id>/delete", methods=['GET','POST'])
 def deleteItem(category_name, item_id):
+    if 'username' not in login_session:
+        return redirect('/login')
     deleteItem = session.query(Jewelry).filter_by(id = item_id).one()
     category_id = deleteItem.category_id
     category = session.query(Category).filter_by(id = category_id).one()

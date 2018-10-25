@@ -5,7 +5,7 @@ from sqlalchemy.orm import sessionmaker
 from db_setup import Base, Category, Jewelry
 
 # Lets program know which database to use
-engine = create_engine('sqlite:///catalog.db')
+engine = create_engine('sqlite:///catalogwithusers.db')
 
 # Bind engine with Base class - connects class definintions with
 # their corresponding tables in the database
@@ -17,11 +17,19 @@ DBSession = sessionmaker(bind = engine)
 # Sessions are used for CRUD functions before being committed
 session = DBSession()
 
+
+
+# Create dummy user
+User1 = User(name="Robo Barista", email="tinnyTim@udacity.com",
+             user_image='https://pbs.twimg.com/profile_images/2671170543/18debd694829ed78203a5a36dd364160_400x400.png')
+session.add(User1)
+session.commit()
+
+
 # Create Entries
 earrings = Category(name = 'Earrings')
 # use session.add to add object myFirstCategory to staging zone before commit
 session.add(earrings)
-
 # commit to database
 session.commit()
 

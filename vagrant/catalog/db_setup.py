@@ -18,7 +18,7 @@ class User(Base):
     id = Column(Integer, primary_key=True)
     name = Column(String(80), nullable=False)
     email = Column(String(80), nullable=False)
-    user_image = Column(String(80), nullable=False, default="default_user.jpg")
+    user_image = Column(String(250), nullable=False, default="default_user.jpg")
 
 class Category(Base):
     # Assign TABLE Name
@@ -27,6 +27,8 @@ class Category(Base):
     # MAPPER CODE - define columns for category table
     id = Column(Integer, primary_key=True)
     name = Column(String(250), nullable=False)
+    user_id = Column(Integer, ForeignKey('user.id'))
+    user = relationship(User)
     
     # JSON Configuration
     @property
@@ -55,6 +57,9 @@ class Jewelry(Base):
     #Establish relationship with other table
     category = relationship(Category)
 
+    user_id = Column(Integer, ForeignKey('user.id'))
+    user = relationship(User)
+
     # JSON Configuration
     @property
     def serialize(self):
@@ -71,7 +76,7 @@ class Jewelry(Base):
 
 # create an engine that stores data in the local
 # directory's 'catalog.db' file
-engine = create_engine('sqlite:///catalog.db')
+engine = create_engine('sqlite:///catalogwithusers.db')
 
 # Create all tables in the engine. This is equivalent to "Create Table"
 # statements in raw SQL.
