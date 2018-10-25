@@ -20,7 +20,8 @@ http://www.tooplate.com/view/2092-shelf
     <!-- load stylesheets -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,400">  <!-- Google web font "Open Sans" -->
     <link rel="stylesheet" href="{{ url_for('static',filename='font-awesome-4.7.0/css/font-awesome.min.css') }}">                <!-- Font Awesome -->
-    <link rel="stylesheet" href="{{ url_for('static',filename='css/bootstrap.min.css') }}">                                      <!-- Bootstrap style -->
+    <link rel="stylesheet" href="{{ url_for('static',filename='css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">                                      <!-- Bootstrap style -->
     <link rel="stylesheet" href="{{ url_for('static',filename='css/tooplate-style.css') }}">                                   <!-- Templatemo style -->
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
@@ -57,6 +58,20 @@ http://www.tooplate.com/view/2092-shelf
                             <!-- END LOOP -->
 
                             <li class="nav-item"><a class="nav-link" href="contact.html">Contact Us</a></li>
+
+                            <li class="nav-item">
+                                    <div class = 'flash'>
+                                        {% with messages =  get_flashed_messages() %}
+                                            {% if messages %}
+
+                                                {% for message in messages %}
+                                                    {{ message }}
+                                                {% endfor %}
+
+                                            {% endif %}
+                                        {% endwith %}
+                                    </div>
+                            </li>
                         </ul>
                     </div>
                 </nav>

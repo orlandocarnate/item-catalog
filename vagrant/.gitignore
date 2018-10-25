@@ -1,4 +1,5 @@
 __pycache__
 *.pyc
 .vagrant
-catalog/api-keys.py
+catalog/apikeys.py
+catalog/client_secret.json
