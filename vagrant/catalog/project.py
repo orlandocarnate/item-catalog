@@ -14,7 +14,7 @@ from flask import make_response
 import requests
 
 # Import columns from db_setup.py
-from db_setup import Base, Category, Jewelry
+from db_setup import Base, Category, Jewelry, User
 
 # get client_id
 # from apikeys import apikey
@@ -24,7 +24,7 @@ APPLICATION_NAME = "jewelry catalog"
 app = Flask(__name__)
 
 # DB connection
-engine = create_engine('sqlite:///catalog.db', connect_args={'check_same_thread': False})
+engine = create_engine('sqlite:///catalogwithusers.db', connect_args={'check_same_thread': False})
 Base.metadata.bind = engine
 
 DBSession = sessionmaker(bind=engine)
@@ -75,8 +75,7 @@ def gconnect():
 
     # Check that the access token is valid.
     access_token = credentials.access_token
-    url = ('https://www.googleapis.com/oauth2/v1/tokeninfo?access_token=%s'
-           % access_token)
+    url = ('https://www.googleapis.com/oauth2/v1/tokeninfo?access_token=%s' % access_token)
     h = httplib2.Http()
     result = json.loads(h.request(url, 'GET')[1])
 
@@ -110,12 +109,12 @@ def gconnect():
         return response
 
     # Store the access token in the session for later use.
-    login_session['access_token'] = credentials.access_token
+    login_session['access_token'] = access_token
     login_session['gplus_id'] = gplus_id
 
     # Get user info
     userinfo_url = "https://www.googleapis.com/oauth2/v1/userinfo"
-    params = {'access_token': credentials.access_token, 'alt': 'json'}
+    params = {'access_token': access_token, 'alt': 'json'}
     answer = requests.get(userinfo_url, params=params)
 
     data = answer.json()
@@ -123,6 +122,13 @@ def gconnect():
     login_session['username'] = data['name']
     login_session['picture'] = data['picture']
     login_session['email'] = data['email']
+
+    # check if user exists, else make a new user.
+    user_id = getUserID(login_session['email'])
+    if not user_id:
+        user_id = createUser(login_session)
+    login_session['user_id'] = user_id
+    #login_session.get('user_id') = user_id
 
     output = ''
     output += '<h1>Welcome, '
@@ -169,6 +175,30 @@ def gdisconnect():
 
 
 
+# User Helper Functions
+def createUser(login_session):
+    newUser = User(name=login_session['username'], email=login_session[
+                   'email'], picture=login_session['picture'])
+    session.add(newUser)
+    session.commit()
+    user = session.query(User).filter_by(email=login_session['email']).one()
+    return user.id
+
+
+def getUserInfo(user_id):
+    user = session.query(User).filter_by(id=user_id).one()
+    return user
+
+
+def getUserID(email):
+    try:
+        user = session.query(User).filter_by(email=email).one()
+        return user.id
+    except:
+        return None
+
+
+
 
 # New Registration
 @app.route("/register")
@@ -202,8 +232,8 @@ def categoryPage(category_name):
     category_name = category_name.title()
     category = session.query(Category).filter_by(name = category_name).one()
     items = session.query(Jewelry).filter_by(category = category)
-
-    return render_template('category.html', category = category, items = items, categories = categories)
+    creator = getUserInfo(category.user_id)
+    return render_template('category.html', category = category, items = items, categories = categories, creator= creator)
 
 
 # NEW ITEM
@@ -214,7 +244,11 @@ def newItem(category_name):
     category_name = category_name.title()
     category = session.query(Category).filter_by(name = category_name).one()
     if request.method == 'POST':
-        newJewelryItem = Jewelry(name=request.form['name'], category_id = category.id)
+        newJewelryItem = Jewelry(
+                            name=request.form['name'], 
+                            category_id = category.id, 
+                            user_id=login_session['user_id']
+                            )
         session.add(newJewelryItem)
         session.commit()
         flash('New Jewelry Item Created!')
@@ -246,7 +280,7 @@ def editItem(category_name, item_id):
             editJewelryItem.price = request.form['price']
         session.add(editJewelryItem)
         session.commit()
-        flash('Item has been edited!')
+        flash('%s has been edited!' % editJewelryItem.name)
         return redirect(url_for('itemPage', category_name = category_name, item_id = item_id))
     else:
         return render_template('edititem.html', category_name = category_name, item = editJewelryItem)
@@ -262,7 +296,7 @@ def deleteItem(category_name, item_id):
     if request.method == 'POST':
         session.delete(deleteItem)
         session.commit()
-        flash('Item has been deleted!')
+        flash('%s has been deleted!' % deleteItem.name)
         return redirect(url_for('categoryPage', category_name = category.name))
     else:
         return render_template('deleteitem.html', category_name = category_name, item = deleteItem)
@@ -272,6 +306,7 @@ def deleteItem(category_name, item_id):
 @app.route("/about")
 def about():
     return "<h1>About Page<h1>"
+
 
 if __name__ == '__main__':
     app.secret_key = 'super_secret_key'

@@ -18,7 +18,7 @@ class User(Base):
     id = Column(Integer, primary_key=True)
     name = Column(String(80), nullable=False)
     email = Column(String(80), nullable=False)
-    user_image = Column(String(250), nullable=False, default="default_user.jpg")
+    picture = Column(String(250))
 
 class Category(Base):
     # Assign TABLE Name

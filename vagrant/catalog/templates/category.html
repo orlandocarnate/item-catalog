@@ -20,7 +20,13 @@
                                 {% endif %}
                             {% endwith %}
                         </p>
-                        <h2 class="tm-blue-text tm-margin-b-p">{{ category.name }}</h2>
+                        
+                        <h2 class="tm-blue-text tm-margin-b-p">{{ category.name }}
+                            <figure class="creator">
+                                <img src="{{ creator.picture}}">
+                                <figcaption>{{ creator.name }}</figcaption>
+                            </figure>
+                        </h2>
                         <p class="tm-margin-b-p">Suspendisse suscipit tortor eu nunc fermentum pellentesque. Donec vaius diam ut velit porttitor accumsan. Cras ac porttitor urna, in vehicula diam. Ut ultricies leo dapibus, facilisis justo vel, dignissim tortor.</p>
                         <p class="tm-margin-b-p">Ut iaculis vel libero a auctor. Integer arcu orci, vaius id velit sed, lacinia venenatis felis. Integer in facilisis tortor. Vivamus facilisis mattis finibus. Vestibulum in aliquam nisl. Nunc pretium elementum posuere.</p>
                         <p class="tm-margin-b-p">Nunc vulputate placerat pulvinar. Integer ornare, enim et vestibulum mattis, dolor lacus congue sapien, eget tempor sapien est ut mauris.</p>
