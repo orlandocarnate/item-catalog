@@ -1,13 +1,36 @@
-<html>
-    <body>
-        <h1>New Item for the {{ category.name }} category.</h1>
+{% extends "layout.html" %}
+{% block content %}
+<div class="tm-main-content">
+        <div class="form-group">
+        <h1>New Item for the {{ current_category.name }} category.</h1>
         
-        <form action="{{ url_for('newItem', category_name=category.name) }}" method='post'>
-            <p>Name:</p>
+        
+        <form action="{{ url_for('newItem', category_name=current_category.name) }}" method='post'>
+            <div class='input-group'>
+                <p>Name:</p>
                 <input type='text' size='30' name='name'>
-            <input type='submit' value='Create'>
-            <a href='{{ url_for('categoryPage', category_name=category.name) }}'>Cancel</a>
-        </form>
+                <p>Price:</p>
+                <input type='text' size='8' name='price'>
+                <p>Description:</p>
+                <textarea cols='40' rows='4' name='description'></textarea>
+            </div>
 
-    </body>
-</html>
+            <div class="radio">
+                    <p>Category:</p>
+                    {% for category in categories %}
+                        <input type ='radio' name='category' value ='{{ category.name }}' 
+                        {% if current_category.name == category.name %} 
+                            {{ "checked='checked'"}} 
+                        {% endif %}>{{category.name}}</br>
+                    {% endfor %}
+            </div>
+
+            <input type='submit' value='Create'>
+            
+            </div>
+
+            <a href='{{ url_for('categoryPage', category_name=current_category.name) }}'>Cancel</a>
+        </form>
+        </div>
+</div>
+{% endblock content %}

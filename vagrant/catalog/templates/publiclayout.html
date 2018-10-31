@@ -4,13 +4,15 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-<!--
+    <!--LOAD PRE-REQUISITES FOR GOOGLE SIGN IN -->
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+    <script src="//apis.google.com/js/platform.js?onload=start"></script>
+    <!-- END PRE-REQUISITES FOR GOOGLE SIGN IN -->
+    <!--
+    Template 2092 Shelf
 
-Template 2092 Shelf
-
-http://www.tooplate.com/view/2092-shelf
-
--->
+    http://www.tooplate.com/view/2092-shelf
+    -->
     {% if title %}
         <title>HaveMerci Jewelry - {{ title }}</title>
     {% else %}
@@ -46,7 +48,8 @@ http://www.tooplate.com/view/2092-shelf
                             <i class="fa fa-bars"></i>
                     </button>
 
-                    <!-- LOOP CATEGORIES INTO NAV BAR -->
+
+                    <!-- NAV BAR -->
                     <div class="collapse navbar-collapse tm-main-nav" id="tmMainNav">
                         <ul class="nav nav-fill tm-main-nav-ul">
                             <li class="nav-item"><a class="nav-link active" href="{{ url_for('home') }}">Home</a></li>
@@ -58,15 +61,16 @@ http://www.tooplate.com/view/2092-shelf
                             <!-- END LOOP -->
 
                             <li class="nav-item"><a class="nav-link" href="{{ url_for('aboutPage')}}">About Us</a></li>
-                            
 
-                            <!-- HELLO USER & LOGOFF-->
-                            <li class="navbar-text text-info navbar-right">
-                                Hi, {{ user_name }}! <span class="nav-item">(<a href="{{ url_for('logoff')}}">Logout</a>)</span>
+                            
+                            <li class="navbar-right">
+                                <!-- LOGIN LINK FOR PUBLIC PAGE -->
+                                <a class="nav-link" href='{{ url_for("showLogin") }}'>Login</a>
                             </li>
                             
                         </ul>
                     </div>
+                    <!-- END NAV BAR -->
                 </nav>
                 
             </header>

@@ -3,3 +3,4 @@ __pycache__
 .vagrant
 catalog/apikeys.py
 catalog/client_secret.json
+catalog/fb_client_secret.json

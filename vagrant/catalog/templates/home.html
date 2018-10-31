@@ -2,10 +2,27 @@
 {% block content %}
 
 <div class="tm-main-content">
+    
         <section class="tm-margin-b-l">
+            <div class = 'flash text-info'>
+                {% with messages =  get_flashed_messages() %}
+                    {% if messages %}
+        
+                        {% for message in messages %}
+                            {{ message }}
+                        {% endfor %}
+        
+                    {% endif %}
+                {% endwith %}
+            </div>
+
             <header>
                 <h2 class="tm-main-title">Welcome to HaveMerci Jewelry Store</h2>    
             </header>
+
+            <h4 class='font-italic text-success'>
+                Welcome back, {{ user_name }}!
+            </h4>
             
             <p>Shelf HTML template is provided by Tooplate. Please tell your friends about it. Thank you. Images are from Unsplash website. In tincidunt metus sed justo tincidunt sollicitudin. Curabitur magna tellus, condimentum vitae consectetur id, elementum sit amet erat.</p>
             

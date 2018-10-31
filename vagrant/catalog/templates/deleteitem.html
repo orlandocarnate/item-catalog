@@ -1,5 +1,7 @@
-<html>
-    <body>
+{% extends "layout.html" %}
+{% block content %}
+
+<div class="tm-main-content">
         <h1>You are about to Delete {{ item.name }}!!!</h1>
 
         <form action="{{ url_for('deleteItem', category_name = category_name, item_id = item.id) }}", method='post'>
@@ -7,6 +9,5 @@
             <input type='submit' value='Delete'>
             <a href='{{ url_for('itemPage', category_name = category_name, item_id = item.id) }}'>Cancel</a>
         </form>
-
-    </body>
-</html>
+</div>
+{% endblock content %}

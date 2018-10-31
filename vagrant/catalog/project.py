@@ -19,6 +19,7 @@ from db_setup import Base, Category, Jewelry, User
 # get client_id
 # from apikeys import apikey
 CLIENT_ID = json.loads(open('client_secret.json', 'r').read())['web']['client_id']
+FB_ID = json.loads(open('fb_client_secret.json', 'r').read())['web']['app_id']
 APPLICATION_NAME = "jewelry catalog"
 
 app = Flask(__name__)
@@ -33,14 +34,23 @@ session = DBSession()
 # make categories GLOBAL
 categories = session.query(Category).all()
 
-# app.routes here
+# Upload Global Variables
+UPLOAD_FOLDER = 'static/upload'
+ALLOWED_EXTENSIONS = set(['jpg', 'jpeg', 'png', 'gif'])
+
+
+# ---------- app.routes here ----------
 
 # HOME - All Categories Page
 @app.route("/")
 @app.route("/home")
 def home():
-
-    return render_template('home.html', categories = categories)
+    # If not logged in return PUBLIC page that shows LOGIN link
+    if 'username' not in login_session:
+        return render_template('publichome.html', categories = categories)
+    else:
+        user_name = login_session['username']
+        return render_template('home.html', categories = categories, user_name = user_name)
 
 # Login
 @app.route("/login")
@@ -49,7 +59,7 @@ def showLogin():
         for x in xrange(32))
     login_session['state'] = state
     # return "API key is " + apikey + "The current session state is %s" % login_session['state']
-    return render_template('login.html', STATE=state, apikey = CLIENT_ID)
+    return render_template('login.html', STATE=state, apikey = CLIENT_ID, FB_apikey=FB_ID)
 
 # GCONNECT
 @app.route("/gconnect", methods=['POST'])
@@ -174,6 +184,109 @@ def gdisconnect():
         return response
 
 
+# FBCONNECT
+@app.route('/fbconnect', methods=['POST'])
+def fbconnect():
+    if request.args.get('state') != login_session['state']:
+        response = make_response(json.dumps('Invalid state parameter.'), 401)
+        response.headers['Content-Type'] = 'application/json'
+        return response
+    access_token = request.data
+    print "access token received %s " % access_token
+
+    app_id = json.loads(open('fb_client_secret.json', 'r').read())['web']['app_id']
+    app_secret = json.loads(
+        open('fb_client_secret.json', 'r').read())['web']['app_secret']
+    url = 'https://graph.facebook.com/oauth/access_token?grant_type=fb_exchange_token&client_id=%s&client_secret=%s&fb_exchange_token=%s' % (
+        app_id, app_secret, access_token)
+    h = httplib2.Http()
+    result = h.request(url, 'GET')[1]
+
+
+    # Use token to get user info from API
+    userinfo_url = "https://graph.facebook.com/v2.8/me"
+    '''
+        Due to the formatting for the result from the server token exchange we have to
+        split the token first on commas and select the first index which gives us the key : value
+        for the server access token then we split it on colons to pull out the actual token value
+        and replace the remaining quotes with nothing so that it can be used directly in the graph
+        api calls
+    '''
+    token = result.split(',')[0].split(':')[1].replace('"', '')
+
+    url = 'https://graph.facebook.com/v2.8/me?access_token=%s&fields=name,id,email' % token
+    h = httplib2.Http()
+    result = h.request(url, 'GET')[1]
+    # print "url sent for API access:%s"% url
+    # print "API JSON result: %s" % result
+    data = json.loads(result)
+    login_session['provider'] = 'facebook'
+    login_session['username'] = data["name"]
+    login_session['email'] = data["email"]
+    login_session['facebook_id'] = data["id"]
+
+    # The token must be stored in the login_session in order to properly logout
+    login_session['access_token'] = token
+
+    # Get user picture
+    url = 'https://graph.facebook.com/v2.8/me/picture?access_token=%s&redirect=0&height=200&width=200' % token
+    h = httplib2.Http()
+    result = h.request(url, 'GET')[1]
+    data = json.loads(result)
+
+    login_session['picture'] = data["data"]["url"]
+
+    # see if user exists
+    user_id = getUserID(login_session['email'])
+    if not user_id:
+        user_id = createUser(login_session)
+    login_session['user_id'] = user_id
+
+    output = ''
+    output += '<h1>Welcome, '
+    output += login_session['username']
+
+    output += '!</h1>'
+    output += '<img src="'
+    output += login_session['picture']
+    output += ' " style = "width: 300px; height: 300px;border-radius: 150px;-webkit-border-radius: 150px;-moz-border-radius: 150px;"> '
+
+    flash("Now logged in as %s" % login_session['username'])
+    return output
+
+# FBDISCONNECT
+@app.route('/fbdisconnect')
+def fbdisconnect():
+    facebook_id = login_session['facebook_id']
+    # The access token must me included to successfully logout
+    access_token = login_session['access_token']
+    url = 'https://graph.facebook.com/%s/permissions?access_token=%s' % (facebook_id,access_token)
+    h = httplib2.Http()
+    result = h.request(url, 'DELETE')[1]
+    return "you have been logged out"
+
+# DISCONNECT Google or Facebook
+@app.route('/logoff')
+def logoff():
+    if 'provider' in login_session:
+        if login_session['provider'] == 'google':
+            gdisconnect()
+            del login_session['gplus_id']
+            del login_session['access_token']
+        if login_session['provider'] == 'facebook':
+            fbdisconnect()
+            del login_session['facebook_id']
+        del login_session['username']
+        del login_session['email']
+        del login_session['picture']
+        del login_session['user_id']
+        del login_session['provider']
+        flash("You have successfully been logged out.")
+        return redirect(url_for('home'))
+    else:
+        flash("You were not logged in")
+        return redirect(url_for('home'))
+
 
 # User Helper Functions
 def createUser(login_session):
@@ -198,12 +311,6 @@ def getUserID(email):
         return None
 
 
-
-
-# New Registration
-@app.route("/register")
-def register():
-    return "<h1>Register Page<h1>"
 
 # list Categories in JSON format
 @app.route('/JSON')
@@ -232,8 +339,13 @@ def categoryPage(category_name):
     category_name = category_name.title()
     category = session.query(Category).filter_by(name = category_name).one()
     items = session.query(Jewelry).filter_by(category = category)
-    creator = getUserInfo(category.user_id)
-    return render_template('category.html', category = category, items = items, categories = categories, creator= creator)
+    if 'username' not in login_session:
+        return render_template('publiccategory.html', category = category, items = items, categories = categories)
+    
+    else:
+        creator = getUserInfo(category.user_id)
+        user_name = login_session['username']
+        return render_template('category.html', user_name = user_name, category = category, items = items, categories = categories, creator= creator)
 
 
 # NEW ITEM
@@ -242,7 +354,7 @@ def newItem(category_name):
     if 'username' not in login_session:
         return redirect('/login')
     category_name = category_name.title()
-    category = session.query(Category).filter_by(name = category_name).one()
+    current_category = session.query(Category).filter_by(name = category_name).one()
     if request.method == 'POST':
         newJewelryItem = Jewelry(
                             name=request.form['name'], 
@@ -254,7 +366,8 @@ def newItem(category_name):
         flash('New Jewelry Item Created!')
         return redirect(url_for('categoryPage', category_name = category_name))
     else:
-        return render_template('newitem.html', category = category)
+        user_name = login_session['username']
+        return render_template('newitem.html', user_name = user_name, current_category = current_category, categories=categories)
 
 
 # Single Item - Single; Item Image
@@ -283,7 +396,8 @@ def editItem(category_name, item_id):
         flash('%s has been edited!' % editJewelryItem.name)
         return redirect(url_for('itemPage', category_name = category_name, item_id = item_id))
     else:
-        return render_template('edititem.html', category_name = category_name, item = editJewelryItem)
+        user_name = login_session['username']
+        return render_template('edititem.html', user_name = user_name, category_name = category_name, item = editJewelryItem)
 
 # DELETE ITEM
 @app.route("/<string:category_name>/<int:item_id>/delete", methods=['GET','POST'])
@@ -299,13 +413,40 @@ def deleteItem(category_name, item_id):
         flash('%s has been deleted!' % deleteItem.name)
         return redirect(url_for('categoryPage', category_name = category.name))
     else:
-        return render_template('deleteitem.html', category_name = category_name, item = deleteItem)
+        user_name = login_session['username']
+        return render_template('deleteitem.html', user_name = user_name, category_name = category_name, item = deleteItem)
 
+# UPLOAD IMAGE TEST PAGE
+@app.route("/upload/")
+def uploadImage():
+    if request.method == 'POST':
+        # check if the post request has the file part
+        if 'file' not in request.files:
+            flash('No file part')
+            return redirect(request.url)
+        file = request.files['file']
+        # if user does not select file, browser also
+        # submit an empty part without filename
+        if file.filename == '':
+            flash('No selected file')
+            return redirect(request.url)
+        if file and allowed_file(file.filename):
+            filename = secure_filename(file.filename)
+            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            return redirect(url_for('uploaded_file',
+                                    filename=filename))
+        return redirect(url_for('home'))
+    else: 
+        return render_template('upload.html')
 
 # About Page
 @app.route("/about")
-def about():
-    return "<h1>About Page<h1>"
+def aboutPage():
+    if 'username' not in login_session:
+        return render_template('publicabout.html', categories = categories)
+    else:
+        user_name = login_session['username']
+        return render_template('about.html', user_name = user_name)
 
 
 if __name__ == '__main__':

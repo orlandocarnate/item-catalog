@@ -1,0 +1,69 @@
+{% extends "publiclayout.html" %}
+{% block content %}
+
+<div class="tm-main-content">
+    <section class="tm-margin-b-l">
+        <div class = 'flash text-info'>
+            {% with messages =  get_flashed_messages() %}
+                {% if messages %}
+    
+                    {% for message in messages %}
+                        {{ message }}
+                    {% endfor %}
+    
+                {% endif %}
+            {% endwith %}
+        </div>
+
+        <header>
+            <h2 class="tm-main-title">Welcome to HaveMerci Jewelry Store</h2>    
+        </header>
+
+        
+        <p>Shelf HTML template is provided by Tooplate. Please tell your friends about it. Thank you. Images are from Unsplash website. In tincidunt metus sed justo tincidunt sollicitudin. Curabitur magna tellus, condimentum vitae consectetur id, elementum sit amet erat.</p>
+        
+        <div class="tm-gallery">
+            <div class="row">
+
+                <!-- CATEGORIES FOR LOOP -->
+                {% for category in categories %}
+                <figure class="col-lg-3 col-md-4 col-sm-6 col-12 tm-gallery-item">
+                    <a href="{{ url_for('categoryPage', category_name = category.name) }}">
+                        <div class="tm-gallery-item-overlay">
+                            <img src="{{ url_for('static',filename='img/image-01.jpg') }}" alt="Image" class="img-fluid tm-img-center">
+                        </div>
+                        
+                        <p class="tm-figcaption">{{ category.name }}</p>
+                    </a>
+                </figure>
+                {% endfor %}
+            </div>   
+        </div>
+        
+        <nav class="tm-gallery-nav">
+            <ul class="nav justify-content-center">
+                <li class="nav-item"><a class="nav-link active" href="#">1</a></li>
+                <li class="nav-item"><a class="nav-link" href="#">2</a></li>
+                <li class="nav-item"><a class="nav-link" href="#">3</a></li>
+                <li class="nav-item"><a class="nav-link" href="#">4</a></li>                    
+            </ul>
+        </nav>
+    </section>
+
+    <section class="media tm-highlight tm-highlight-w-icon">
+
+        <div class="tm-highlight-icon">
+            <i class="fa tm-fa-6x fa-meetup"></i>    
+        </div>                    
+
+        <div class="media-body">
+            <header>
+                <h2>Need Help?</h2>
+            </header>
+            <p class="tm-margin-b">Curabitur magna tellus, condimentum vitae consectetur id, elementum sit amet erat. Phasellus arcu leo, sagittis fringilla nisi et, pulvinar vestibulum mi. Maecenas mollis ullamcorper est at dignissim.</p>
+            <a href="" class="tm-white-bordered-btn">Live Chat</a>
+        </div>                    
+    </section>
+</div>
+
+{% endblock content %}
