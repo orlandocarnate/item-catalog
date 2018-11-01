@@ -27,6 +27,7 @@ class Category(Base):
     # MAPPER CODE - define columns for category table
     id = Column(Integer, primary_key=True)
     name = Column(String(250), nullable=False)
+    category_image = Column(String(80), nullable=False, default="700x400.png")
     user_id = Column(Integer, ForeignKey('user.id'))
     user = relationship(User)
     

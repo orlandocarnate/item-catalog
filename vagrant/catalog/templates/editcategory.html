@@ -1,0 +1,28 @@
+{% extends "layout.html" %}
+{% block content %}
+
+<div class="tm-main-content">
+        <h1>Edit {{ item.name }}</h1>
+
+        <form action="{{ url_for('editItem', category_name = category_name, item_id = item.id) }}", method='post'>
+            <p>Name:</p>
+                <input type='text' size='30' name='name' value='{{ item.name }}'>
+            <p>Price:</p>
+                <input type='text' size='8' name='price' value='{{ item.price }}'>
+            <p>Description:</p>
+                <textarea cols='40' rows='4' name='description'>{{ item.description }}</textarea>
+            <input type='submit' value='Edit'>
+
+            <p>Category:</p>
+            <div class="radio">
+                {% for category in categories %}
+                    <input type ='radio' name='category' value ='{{ category.name }}' 
+                    {% if current_category.name == category.name %} 
+                        {{ "checked='checked'"}} 
+                    {% endif %}>{{category.name}}</br>
+                {% endfor %}
+            </div>
+            <a href='{{ url_for('itemPage', category_name = category_name, item_id = item.id) }}'>Cancel</a>
+        </form>
+</div>
+{% endblock content %}

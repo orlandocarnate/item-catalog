@@ -2,6 +2,7 @@
 from flask import Flask, render_template, request, redirect, url_for, flash, app, jsonify
 from sqlalchemy import create_engine, asc
 from sqlalchemy.orm import sessionmaker
+import os
 
 # OAUTH Imports
 from flask import session as login_session
@@ -47,7 +48,7 @@ ALLOWED_EXTENSIONS = set(['jpg', 'jpeg', 'png', 'gif'])
 def home():
     # If not logged in return PUBLIC page that shows LOGIN link
     if 'username' not in login_session:
-        return render_template('publichome.html', categories = categories)
+        return render_template('shop/publichome.html', categories = categories)
     else:
         user_name = login_session['username']
         return render_template('home.html', categories = categories, user_name = user_name)
@@ -340,12 +341,34 @@ def categoryPage(category_name):
     category = session.query(Category).filter_by(name = category_name).one()
     items = session.query(Jewelry).filter_by(category = category)
     if 'username' not in login_session:
-        return render_template('publiccategory.html', category = category, items = items, categories = categories)
+        return render_template('shop/publiccategory.html', category = category, items = items, categories = categories)
     
     else:
         creator = getUserInfo(category.user_id)
         user_name = login_session['username']
-        return render_template('category.html', user_name = user_name, category = category, items = items, categories = categories, creator= creator)
+        return render_template('shop/category.html', user_name = user_name, category = category, items = items, categories = categories, creator= creator)
+
+# EDIT CATEGORY
+@app.route("/<string:category_name>/edit/", methods=['GET','POST'])
+def editCategoryPage(category_name):
+    # if 'username' not in login_session:
+        # return redirect('/login')
+    editCategory = session.query(Category).filter_by(name = category_name).one()
+    if request.method == 'POST':
+        if request.form['name']:
+            editCategory.name = request.form['name']
+        if request.form['description']:
+            editCategory.description = request.form['description']
+        if request.form['category_image']:
+            editCategory.category_image = request.form['category_image']
+        session.add(editCategory)
+        session.commit()
+        flash('%s has been edited!' % editCategory.name)
+        return redirect( url_for('categoryPage', category_name = category_name) )
+    else:
+        # user_name = login_session['username']
+        category_images = os.listdir("static/img/categories/")
+        return render_template('shop/editcategory.html', category_images = category_images, category = editCategory)
 
 
 # NEW ITEM

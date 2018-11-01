@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>HaveMerci Jewelry</title>
+
+    <!-- Bootstrap core CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='vendor/bootstrap/css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='vendor/bootstrap/css/bootstrap.min.css') }}">
+
+    <!-- Custom styles for this template -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/shop-homepage.css') }}">
+
+  </head>
+
+  <body>
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+      <div class="container">
+          <img src="{{ url_for('static', filename='havemerci.gif') }}">
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item active">
+              <a class="nav-link" href="{{ url_for('home') }}">Home</a>
+            </li>
+
+            <!-- LOOP CATEGORIES INTO NAV BAR -->
+            {% for category in categories %}
+            <li class="nav-item"><a class="nav-link" href="{{ url_for('categoryPage', category_name = category.name) }}">{{ category.name }}</a></li>
+            {% endfor %}
+            <!-- END LOOP -->
+
+            <li class="nav-item">
+              <a class="nav-link" href="{{ url_for('aboutPage')}}">About</a>
+            
+
+            <!-- LOGIN LINK FOR PUBLIC PAGE -->
+            <li class="nav-item"></li>
+              <a class="nav-link" href='{{ url_for("showLogin") }}'>Login</a>
+            </li>
+
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Page Content -->
+    <div class="container">
+
+      <div class="row">
+
+        <!-- LEFT COLUMN LARGE 3 width-->
+        <div class="col-lg-3">
+
+          <h4 class="my-4">Jewelry Catalog</h4>
+          <div class="list-group">
+            <!-- CATEGORIES FOR LOOP -->
+            {% for category in categories %}
+            <a href="{{ url_for('categoryPage', category_name = category.name) }}" class="list-group-item">{{ category.name }}</a>
+            {% endfor %}
+          </div>
+
+        </div>
+        <!-- /.col-lg-3 -->
+
+        <div class="col-lg-9">
+
+          <!-- !PAGE CONTENT! -->
+          {% block content %}{% endblock %}
+
+        </div>
+        <!-- /.col-lg-9 -->
+
+      </div>
+      <!-- /.row -->
+
+    </div>
+    <!-- /.container -->
+
+    <!-- Footer -->
+    <footer class="py-5 bg-dark">
+      <div class="container">
+        <p class="m-0 text-center text-white">Copyright &copy; HaveMerci 2018</p>
+      </div>
+      <!-- /.container -->
+    </footer>
+
+    <!-- Bootstrap core JavaScript -->
+    <script src="{{ url_for('static', filename='vendor/jquery/jquery.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+
+  </body>
+
+</html>
