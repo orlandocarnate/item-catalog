@@ -1,33 +1,48 @@
 {% extends "shop/publiclayout.html" %}
 {% block content %}
 
-            <!-- Items WITH IMAGES -->
-            <div class="row">
-                
-              <!-- ITEMS FOR LOOP -->
-              {% for item in items %}
-              <div class="col-lg-4 col-md-6 mb-4">
-                <div class="card h-100">
-                  <a href="{{ url_for('itemPage', category_name = category.name, item_id = item.id) }}">
-                      <img class="card-img-top" src="{{ url_for('static',filename='img/700x400.png') }}" alt="">
-                  </a>
-                  <div class="card-body">
-                    <h4 class="card-title">
-                      <a href="{{ url_for('itemPage', category_name = category.name, item_id = item.id) }}">{{ item.name }}</a>
-                    </h4>
+          <div class="col-lg-9">
+
+            <div class="card mt-4">
+              <img class="card-img-top img-fluid" src="{{ url_for('static',filename='img/categories/' + category.category_image) }}" alt="{{ category.name }}">
+              <div class="card-body">
+                <h3 class="card-title">{{ category.name }}</h3>
+                <p class="card-text">{{ category.description }}</p>
+              </div>
+            </div>
+            <!-- /.card -->
+            
+            <p></p>
+
+            <div>
+              <!-- CATEGORY ITEMS WITH IMAGES -->
+              <div class="row">
+                  
+                <!-- ITEMS FOR LOOP -->
+                {% for item in items %}
+                <div class="col-lg-4 col-md-6 mb-4">
+                  <div class="card h-100">
+                    <a href="{{ url_for('itemPage', category_name = category.name, item_id = item.id) }}">
+                        <img class="card-img-top" src="{{ url_for('static',filename='img/700x400.png') }}" alt="">
+                    </a>
+                    <div class="card-body">
+                      <h4 class="card-title">
+                        <a href="{{ url_for('itemPage', category_name = category.name, item_id = item.id) }}">{{ item.name }}</a>
+                      </h4>
+                    </div>
                   </div>
                 </div>
-              </div>
-              {% endfor %}
-              <!-- END CATEGORIES FOR LOOP -->
+                {% endfor %}
+                <!-- END ITEM FOR LOOP -->
 
               </div>
               <!-- /.row -->
               <!-- END CATEGORIES WITH IMAGES -->
-    
-              </div>
-              <!-- /.row -->
-              <!-- END CATEGORIES WITH IMAGES -->
+            </div>
+            <!-- /.card -->
+
+          </div>
+          <!-- /.col-lg-9 -->
 
 
 

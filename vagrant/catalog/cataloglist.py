@@ -21,14 +21,14 @@ session = DBSession()
 def category_list():
     categories = session.query(Category).all()
     for category in categories:
-        print('Category: {0} ID: {1}'.format(category.name, category.id))
+        print('Category: {0} ID: {1} Image {2}'.format(category.name, category.id, category.category_image))
     return
 
 # List Items
 def item_list():
     items = session.query(Jewelry).all()
     for item in items:
-        print('Item: {0} ID: {1} Price {2} Category ID {3}'.format(item.name, item.id, item.price, item.category_id))
+        print('Item: {0} ID: {1} Price: {2} Category ID: {3} Image: {4}'.format(item.name, item.id, item.price, item.category_id, item.product_image))
     return
 
 # List Users

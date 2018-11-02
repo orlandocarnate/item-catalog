@@ -364,7 +364,7 @@ def editCategoryPage(category_name):
         session.add(editCategory)
         session.commit()
         flash('%s has been edited!' % editCategory.name)
-        return redirect( url_for('categoryPage', category_name = category_name) )
+        return redirect( url_for('home') )
     else:
         # user_name = login_session['username']
         category_images = os.listdir("static/img/categories/")
@@ -399,7 +399,7 @@ def itemPage(category_name, item_id):
     item = session.query(Jewelry).filter_by(id = item_id).one()
     category_id = item.category_id
     category = session.query(Category).filter_by(id = category_id).one()
-    return render_template('item.html', item = item, category = category)
+    return render_template('shop/publicitem.html', item = item, category = category)
 
 # EDIT Item - Add GET & POST Methods
 @app.route("/<string:category_name>/<int:item_id>/edit", methods=['GET','POST'])

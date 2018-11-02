@@ -12,22 +12,28 @@
 
     <!-- Bootstrap core CSS -->
     <link rel="stylesheet" href="{{ url_for('static', filename='vendor/bootstrap/css/bootstrap.min.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='vendor/bootstrap/css/bootstrap.min.css') }}">
+
+    <!-- Custom styles for this template 
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/shop-homepage.css') }}">
+    -->
 
     <!-- Custom styles for this template -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/shop-homepage.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/modern-business.css') }}">
 
   </head>
 
   <body>
 
     <!-- Navigation -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+    <nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark fixed-top">
       <div class="container">
+        <!-- <a class="navbar-brand" href="index.html">Start Bootstrap</a> -->
           <img src="{{ url_for('static', filename='havemerci.gif') }}">
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+
+        <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
+
         <div class="collapse navbar-collapse" id="navbarResponsive">
           <ul class="navbar-nav ml-auto">
             <li class="nav-item active">
@@ -46,46 +52,20 @@
 
             <!-- LOGIN LINK FOR PUBLIC PAGE -->
             <li class="nav-item"></li>
-              <a class="nav-link" href='{{ url_for("showLogin") }}'>Login</a>
+              <a class="btn btn-primary" href='{{ url_for("showLogin") }}'>Login</a>
             </li>
 
           </ul>
         </div>
       </div>
     </nav>
+    <!-- END Navigation -->
 
     <!-- Page Content -->
-    <div class="container">
+    {% block content %}{% endblock %}
+    <!-- END PAGE CONTENT! -->
+    
 
-      <div class="row">
-
-        <!-- LEFT COLUMN LARGE 3 width-->
-        <div class="col-lg-3">
-
-          <h4 class="my-4">Jewelry Catalog</h4>
-          <div class="list-group">
-            <!-- CATEGORIES FOR LOOP -->
-            {% for category in categories %}
-            <a href="{{ url_for('categoryPage', category_name = category.name) }}" class="list-group-item">{{ category.name }}</a>
-            {% endfor %}
-          </div>
-
-        </div>
-        <!-- /.col-lg-3 -->
-
-        <div class="col-lg-9">
-
-          <!-- !PAGE CONTENT! -->
-          {% block content %}{% endblock %}
-
-        </div>
-        <!-- /.col-lg-9 -->
-
-      </div>
-      <!-- /.row -->
-
-    </div>
-    <!-- /.container -->
 
     <!-- Footer -->
     <footer class="py-5 bg-dark">
