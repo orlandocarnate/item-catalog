@@ -1,10 +1,9 @@
-{% extends "shop/publiclayout.html" %}
+{% extends "shop/layout.html" %}
 {% block content %}
 
 
 <header>
         <!-- CAROUSEL -->
-        <div class="container">
         <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
             <ol class="carousel-indicators">
                 <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
@@ -69,13 +68,26 @@
 
         </div>
             <!-- END CAROUSEL -->
-        </div>
 </header>
 
 <div class="container">
 
-        <h1 class="my-4">Welcome to HaveMerci Jewelry!</h1>
+        <div class = 'flash text-info'>
+            {% with messages =  get_flashed_messages() %}
+                {% if messages %}
+    
+                    {% for message in messages %}
+                        {{ message }}
+                    {% endfor %}
+    
+                {% endif %}
+            {% endwith %}
+        </div>
 
+        
+
+        <h1 class="my-4">Welcome to HaveMerci Jewelry!</h1>
+        <h4>Hi, {{ user_name }}!</h4>
 
             <!-- CATEGORIES WITH IMAGES -->
             <div class="row">

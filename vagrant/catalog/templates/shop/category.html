@@ -1,4 +1,4 @@
-{% extends "shop/publiclayout.html" %}
+{% extends "shop/layout.html" %}
 {% block content %}
 
 <main role="main">
@@ -7,7 +7,7 @@
         <h1 class="jumbotron-heading">{{ category.name }}</h1>
         <p class="lead text-muted">{{ category.description }}</p>
         <p>
-          <a href="#" class="btn btn-primary my-2">Welcome!</a>
+          <a href="{{ url_for('newItem', category_name = category.name) }}" class="btn btn-primary my-2">Add a new item</a>
         </p>
       </div>
     </section>

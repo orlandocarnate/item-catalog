@@ -1,0 +1,34 @@
+{% extends "shop/layout.html" %}
+{% block content %}
+
+
+    <!-- Page Content -->
+    <div class="container">
+
+          <div class="card mt-4">
+            <img class="card-img-top" src="{{ url_for('static',filename='img/items/' + item.product_image) }}" alt="">
+            <div class="card-body">
+              <h3 class="card-title">{{ item.name }}</h3>
+              <h5>{{ item.price }}</h5></br>
+              <h4>Description:</h4>
+              <p class="card-text">{{ item.description }}</p>
+              <!-- Star Rating NOT USED
+                <span class="text-warning">&#9733; &#9733; &#9733; &#9733; &#9734;</span>
+                4.0 stars
+             -->
+              </br></br>
+              <div class="btn-group">
+                  <a href='{{ url_for("editItem",category_name = category.name, item_id = item.id) }}' 
+                    class="btn btn-sm btn-outline-primary">Edit</a>
+                  <a href='{{ url_for("deleteItem", category_name = category.name, item_id = item.id) }}' 
+                    class="btn btn-sm btn-outline-secondary">Delete</a>
+              </div>
+            </div>
+          </div>
+          <!-- /.card -->
+
+
+    </div>
+    <!-- /.container -->
+
+{% endblock content %}

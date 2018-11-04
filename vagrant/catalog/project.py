@@ -51,7 +51,7 @@ def home():
         return render_template('shop/publichome.html', categories = categories)
     else:
         user_name = login_session['username']
-        return render_template('home.html', categories = categories, user_name = user_name)
+        return render_template('shop/home.html', categories = categories, user_name = user_name)
 
 # Login
 @app.route("/login")
@@ -60,7 +60,7 @@ def showLogin():
         for x in xrange(32))
     login_session['state'] = state
     # return "API key is " + apikey + "The current session state is %s" % login_session['state']
-    return render_template('login.html', STATE=state, apikey = CLIENT_ID, FB_apikey=FB_ID)
+    return render_template('shop/login.html', STATE=state, apikey = CLIENT_ID, FB_apikey=FB_ID)
 
 # GCONNECT
 @app.route("/gconnect", methods=['POST'])
@@ -315,11 +315,13 @@ def getUserID(email):
 
 # list Categories in JSON format
 @app.route('/JSON')
+@app.route('/json')
 def homeJSON():
     return jsonify(Category=[i.serialize for i in categories])
 
 # list Category items in JSON format
 @app.route('/<string:category_name>/JSON')
+@app.route('/<string:category_name>/json')
 def categoryJSON(category_name):
     category_name = category_name.title()
     category = session.query(Category).filter_by(name = category_name).one()
@@ -329,6 +331,7 @@ def categoryJSON(category_name):
 
 # list single item in JSON format
 @app.route('/<string:category_name>/<int:item_id>/JSON')
+@app.route('/<string:category_name>/<int:item_id>/json')
 def itemJSON(category_name, item_id):
     item = session.query(Jewelry).filter_by(id = item_id).one()
     return jsonify(Jewelry=item.serialize)
@@ -371,11 +374,21 @@ def editCategoryPage(category_name):
         return render_template('shop/editcategory.html', category_images = category_images, category = editCategory)
 
 
+# VIEW Single Item - Single; Item Image
+@app.route("/<string:category_name>/<int:item_id>/")
+def itemPage(category_name, item_id):
+    item = session.query(Jewelry).filter_by(id = item_id).one()
+    category_id = item.category_id
+    category = session.query(Category).filter_by(id = category_id).one()
+    if 'username' not in login_session:
+        return render_template('shop/publicitem.html', item = item, category = category)
+    else:
+        user_name = login_session['username']
+        return render_template('shop/item.html', user_name = user_name,  item = item, category = category)
+
 # NEW ITEM
 @app.route("/<string:category_name>/new/", methods=['GET','POST'])
 def newItem(category_name):
-    if 'username' not in login_session:
-        return redirect('/login')
     category_name = category_name.title()
     current_category = session.query(Category).filter_by(name = category_name).one()
     if request.method == 'POST':
@@ -390,16 +403,7 @@ def newItem(category_name):
         return redirect(url_for('categoryPage', category_name = category_name))
     else:
         user_name = login_session['username']
-        return render_template('newitem.html', user_name = user_name, current_category = current_category, categories=categories)
-
-
-# Single Item - Single; Item Image
-@app.route("/<string:category_name>/<int:item_id>/")
-def itemPage(category_name, item_id):
-    item = session.query(Jewelry).filter_by(id = item_id).one()
-    category_id = item.category_id
-    category = session.query(Category).filter_by(id = category_id).one()
-    return render_template('shop/publicitem.html', item = item, category = category)
+        return render_template('shop/newitem.html', current_category = current_category, categories=categories)
 
 # EDIT Item - Add GET & POST Methods
 @app.route("/<string:category_name>/<int:item_id>/edit", methods=['GET','POST'])
@@ -414,13 +418,16 @@ def editItem(category_name, item_id):
             editJewelryItem.description = request.form['description']
         if request.form['price']:
             editJewelryItem.price = request.form['price']
+        if request.form['product_image']:
+            editJewelryItem.product_image = request.form['product_image']
         session.add(editJewelryItem)
         session.commit()
         flash('%s has been edited!' % editJewelryItem.name)
         return redirect(url_for('itemPage', category_name = category_name, item_id = item_id))
     else:
         user_name = login_session['username']
-        return render_template('edititem.html', user_name = user_name, category_name = category_name, item = editJewelryItem)
+        product_images = os.listdir("static/img/items/")
+        return render_template('shop/edititem.html', user_name = user_name, category_name = category_name, item = editJewelryItem, product_images = product_images)
 
 # DELETE ITEM
 @app.route("/<string:category_name>/<int:item_id>/delete", methods=['GET','POST'])
@@ -469,7 +476,7 @@ def aboutPage():
         return render_template('publicabout.html', categories = categories)
     else:
         user_name = login_session['username']
-        return render_template('about.html', user_name = user_name)
+        return render_template('shop/about.html', user_name = user_name)
 
 
 if __name__ == '__main__':

@@ -1,29 +1,55 @@
-{% extends "layout.html" %}
+{% extends "shop/layout.html" %}
 {% block content %}
 
-<div class="tm-main-content">
+<div class="container">
         <h1>Edit {{ item.name }}</h1>
 
         <form action="{{ url_for('editItem', category_name = category_name, item_id = item.id) }}", method='post'>
-            <p>Name:</p>
-                <input type='text' size='30' name='name' value='{{ item.name }}'>
-            <p>Price:</p>
-                <input type='text' size='8' name='price' value='{{ item.price }}'>
-            <p>Description:</p>
-                <textarea cols='40' rows='4' name='description'>{{ item.description }}</textarea>
             
 
-            <p>Category:</p>
-            <div class="radio">
-                {% for category in categories %}
-                    <input type ='radio' name='category' value ='{{ category.name }}' 
-                    {% if current_category.name == category.name %} 
-                        {{ "checked='checked'"}} 
-                    {% endif %}>{{category.name}}</br>
-                {% endfor %}
+            <div class="card">
+                    <img class="card-img-top" src="{{ url_for('static',filename='img/items/' + item.product_image) }}" alt="">
+                    <div class="card-body">
+                        
+                        <!-- INPUT FIELD SECTION -->
+                        <div class="form-group">
+                            <p>Name:</p>
+                                <input type='text' size='30' name='name' value='{{ item.name }}'>
+                            <p>Price:</p>
+                                <input type='text' size='8' name='price' value='{{ item.price }}'>
+                            <p>Description:</p>
+                                <textarea cols='40' rows='4' name='description'>{{ item.description }}</textarea>
+                        </div>
+
+                        <!-- SELECT PRODUCT IMAGE -->
+                        <div class="form-group">
+                            <p>Product Image:</p>
+                            <div class="select">
+                                <select name="product_image">
+                                {% for product_image in product_images %}
+                                    <option value ='{{ product_image }}'>{{ product_image }}</option>
+                                {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- SUBMIT SECTION -->
+                        <div class="form-group">
+                            <input class="btn btn-sm btn-outline-primary" type='submit' value='Submit Changes' >
+                            <a class="btn btn-sm btn-outline-secondary" href='{{ url_for('itemPage', category_name = category_name, item_id = item.id) }}'>Cancel</a>
+                        </div>
+
+                    </div>
+
+                      
+
             </div>
-            <input type='submit' value='Edit'>
-            <a href='{{ url_for('itemPage', category_name = category_name, item_id = item.id) }}'>Cancel</a>
+            <!-- /.card -->
+
+            
         </form>
+
+
+        
 </div>
 {% endblock content %}
