@@ -32,10 +32,9 @@ Make sure you're in the `vagrant/catalog` folder within the Linux VM terminal. E
 In the Linux VM terminal run this command:
 `python project.py`
 
-## Template Style 
-I researched a few Bootstrap templates for the catalog.
-
-Here are a few I have researched:
+## Template Style with Bootstrap
+I probably spent half the time researching Bootstrap for my Flask templates. Below are some of the sites I have been researhing:
+* **[GetBootstrap.com Examples](http://getbootstrap.com/docs/4.1/examples/)**
 * **[Tooplate.com Shelf Template](https://www.tooplate.com/live/2092-shelf)**
-*  **[W3schools.com Clothing Store Template](https://www.w3schools.com/w3css/tryw3css_templates_clothing_store.htm)**
-*  **[Startbootstrap.com Shop Homepage Template](https://startbootstrap.com/template-overviews/shop-homepage/)**
+* **[W3schools.com Clothing Store Template](https://www.w3schools.com/w3css/tryw3css_templates_clothing_store.htm)**
+* **[Startbootstrap.com Shop Homepage Template](https://startbootstrap.com/template-overviews/shop-homepage/)**

@@ -4,3 +4,5 @@ __pycache__
 catalog/apikeys.py
 catalog/client_secret.json
 catalog/fb_client_secret.json
+catalog/static/ignore
+catalog/templates/old_template

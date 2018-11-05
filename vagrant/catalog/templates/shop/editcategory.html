@@ -1,10 +1,12 @@
-{% extends "shop/publiclayout.html" %}
+{% extends "shop/layout.html" %}
 {% block content %}
+{% include "shop/navbar.html" %}
 
-<div class="tm-main-content">
+<div class="container">
         <h1>Edit {{ category.name }}</h1>
 
         <form action="{{ url_for('editCategoryPage', category_name = category.name) }}", method='post'>
+
             <div class="form-group">
                 <p>Name:</p>
                 <input type='text' size='30' name='name' value='{{ category.name }}'>
@@ -19,15 +21,20 @@
                 <div class="select">
                     <select name="category_image">
                     {% for category_image in category_images %}
-                        <option value ='{{ category_image }}'>{{ category_image }}</option>
+                        <option value ='{{ category_image }}'
+                        {% if category_image == category.category_image %} 
+                            {{ "selected='selected'"}} 
+                        {% endif %}>{{ category_image }}</option>
                     {% endfor %}
                     </select>
                 </div>
             </div>
         
+            <!-- SUBMIT SECTION -->
+
             <div class="form-group">
-                    <p></p><input type='submit' value='Edit'></br>
-                    <a href='{{ url_for('categoryPage', category_name = category_name) }}'>Cancel</a>
+                    <p></p><input class="btn btn-sm btn-outline-primary" type='submit' value='Edit'>
+                    <a class="btn btn-sm btn-outline-secondary" href='{{ url_for('categoryPage', category_name = category_name) }}'>Cancel</a>
             </div>
             
 

@@ -28,7 +28,7 @@ def category_list():
 def item_list():
     items = session.query(Jewelry).all()
     for item in items:
-        print('Item: {0} ID: {1} Price: {2} Category ID: {3} Image: {4}'.format(item.name, item.id, item.price, item.category_id, item.product_image))
+        print('Item: {0} ID: {1} Price: {2} Category ID: {3} Image: {4} User ID: {5}'.format(item.name, item.id, item.price, item.category_id, item.product_image, item.user_id))
     return
 
 # List Users

@@ -48,7 +48,7 @@ ALLOWED_EXTENSIONS = set(['jpg', 'jpeg', 'png', 'gif'])
 def home():
     # If not logged in return PUBLIC page that shows LOGIN link
     if 'username' not in login_session:
-        return render_template('shop/publichome.html', categories = categories)
+        return render_template('shop/home.html', categories = categories)
     else:
         user_name = login_session['username']
         return render_template('shop/home.html', categories = categories, user_name = user_name)
@@ -130,6 +130,7 @@ def gconnect():
 
     data = answer.json()
 
+    login_session['provider'] = 'google'
     login_session['username'] = data['name']
     login_session['picture'] = data['picture']
     login_session['email'] = data['email']
@@ -156,26 +157,17 @@ def gconnect():
 # GDISCONNECT - Revoke a current user's token ad reset login_session.
 @app.route('/gdisconnect')
 def gdisconnect():
+    # Only disconnect a connected user.
     access_token = login_session.get('access_token')
     if access_token is None:
-        print 'Access Token is None'
-        response = make_response(json.dumps('Current user not connected.'), 401)
+        response = make_response(
+            json.dumps('Current user not connected.'), 401)
         response.headers['Content-Type'] = 'application/json'
         return response
-    print 'In gdisconnect access token is %s', access_token
-    print 'User name is: '
-    print login_session['username']
-    url = 'https://accounts.google.com/o/oauth2/revoke?token=%s' % login_session['access_token']
+    url = 'https://accounts.google.com/o/oauth2/revoke?token=%s' % access_token
     h = httplib2.Http()
     result = h.request(url, 'GET')[0]
-    print 'result is '
-    print result
     if result['status'] == '200':
-        del login_session['access_token']
-        del login_session['gplus_id']
-        del login_session['username']
-        del login_session['email']
-        del login_session['picture']
         response = make_response(json.dumps('Successfully disconnected.'), 200)
         response.headers['Content-Type'] = 'application/json'
         return response
@@ -269,6 +261,7 @@ def fbdisconnect():
 # DISCONNECT Google or Facebook
 @app.route('/logoff')
 def logoff():
+
     if 'provider' in login_session:
         if login_session['provider'] == 'google':
             gdisconnect()
@@ -354,8 +347,8 @@ def categoryPage(category_name):
 # EDIT CATEGORY
 @app.route("/<string:category_name>/edit/", methods=['GET','POST'])
 def editCategoryPage(category_name):
-    # if 'username' not in login_session:
-        # return redirect('/login')
+    if 'username' not in login_session:
+        return redirect('/login')
     editCategory = session.query(Category).filter_by(name = category_name).one()
     if request.method == 'POST':
         if request.form['name']:
@@ -367,7 +360,7 @@ def editCategoryPage(category_name):
         session.add(editCategory)
         session.commit()
         flash('%s has been edited!' % editCategory.name)
-        return redirect( url_for('home') )
+        return redirect( url_for('categoryPage', category_name = category_name) )
     else:
         # user_name = login_session['username']
         category_images = os.listdir("static/img/categories/")
@@ -392,9 +385,12 @@ def newItem(category_name):
     category_name = category_name.title()
     current_category = session.query(Category).filter_by(name = category_name).one()
     if request.method == 'POST':
+        new_category = session.query(Category).filter_by(name = request.form['category']).one()
         newJewelryItem = Jewelry(
                             name=request.form['name'], 
-                            category_id = category.id, 
+                            price=request.form['price'], 
+                            description=request.form['description'], 
+                            category_id = new_category.id, 
                             user_id=login_session['user_id']
                             )
         session.add(newJewelryItem)
@@ -411,6 +407,11 @@ def editItem(category_name, item_id):
     if 'username' not in login_session:
         return redirect('/login')
     editJewelryItem = session.query(Jewelry).filter_by(id = item_id).one()
+    # Only Creator can edit.
+    if editJewelryItem.user_id != login_session['user_id']:
+        flash('Only the creator of this item can edit. You must create your own Jewelry item to edit.')
+        return redirect(url_for('itemPage', category_name = category_name, item_id = item_id))
+    
     if request.method == 'POST':
         if request.form['name']:
             editJewelryItem.name = request.form['name']
@@ -435,6 +436,9 @@ def deleteItem(category_name, item_id):
     if 'username' not in login_session:
         return redirect('/login')
     deleteItem = session.query(Jewelry).filter_by(id = item_id).one()
+    if deleteItem.user_id != login_session['user_id']:
+        flash('Only the creator of this item can delete this.')
+        return redirect(url_for('itemPage', category_name = category_name, item_id = item_id))
     category_id = deleteItem.category_id
     category = session.query(Category).filter_by(id = category_id).one()
     if request.method == 'POST':
@@ -444,7 +448,7 @@ def deleteItem(category_name, item_id):
         return redirect(url_for('categoryPage', category_name = category.name))
     else:
         user_name = login_session['username']
-        return render_template('deleteitem.html', user_name = user_name, category_name = category_name, item = deleteItem)
+        return render_template('shop/deleteitem.html', user_name = user_name, category_name = category_name, item = deleteItem)
 
 # UPLOAD IMAGE TEST PAGE
 @app.route("/upload/")

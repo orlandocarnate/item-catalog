@@ -1,7 +1,7 @@
-{% extends "layout.html" %}
+{% extends "shop/layout.html" %}
 {% block content %}
 
-<div class="tm-main-content">
+<div class="container">
         <h1>You are about to Delete {{ item.name }}!!!</h1>
 
         <form action="{{ url_for('deleteItem', category_name = category_name, item_id = item.id) }}", method='post'>

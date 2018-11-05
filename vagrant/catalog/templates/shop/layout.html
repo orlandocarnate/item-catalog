@@ -36,41 +36,6 @@
 
   <body>
 
-    <!-- Navigation -->
-    <nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark fixed-top">
-      <div class="container">
-        <!-- <a class="navbar-brand" href="index.html">Start Bootstrap</a> -->
-          <img src="{{ url_for('static', filename='havemerci.gif') }}">
-
-        <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-
-        <div class="collapse navbar-collapse" id="navbarResponsive">
-          <ul class="navbar-nav ml-auto">
-            <li class="nav-item active">
-              <a class="nav-link" href="{{ url_for('home') }}">Home</a>
-            </li>
-
-            <!-- LOOP CATEGORIES INTO NAV BAR -->
-            {% for category in categories %}
-            <li class="nav-item"><a class="nav-link" href="{{ url_for('categoryPage', category_name = category.name) }}">{{ category.name }}</a></li>
-            {% endfor %}
-            <!-- END LOOP -->
-
-            <li class="nav-item">
-              <a class="nav-link" href="{{ url_for('aboutPage')}}">About</a>
-            
-            <!-- HELLO USER & LOGOFF-->
-            <li class="nav-item">
-                <a class="btn btn-primary" href="{{ url_for('logoff')}}">Logout</a>
-            </li>
-
-          </ul>
-        </div>
-      </div>
-    </nav>
-    <!-- END Navigation -->
 
     <!-- Page Content -->
     {% block content %}{% endblock %}
@@ -87,8 +52,8 @@
     </footer>
 
     <!-- Bootstrap core JavaScript -->
-    <script src="{{ url_for('static', filename='vendor/jquery/jquery.min.js') }}"></script>
-    <script src="{{ url_for('static', filename='vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/jquery-1.11.3.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/bootstrap.bundle.min.js') }}"></script>
 
   </body>
 

@@ -1,16 +1,36 @@
 {% extends "shop/layout.html" %}
 {% block content %}
+{% include "shop/navbar.html" %}
 
 <main role="main">
+    <div class="container">
   <section class="jumbotron text-center">
-      <div class="container">
+      
         <h1 class="jumbotron-heading">{{ category.name }}</h1>
         <p class="lead text-muted">{{ category.description }}</p>
         <p>
           <a href="{{ url_for('newItem', category_name = category.name) }}" class="btn btn-primary my-2">Add a new item</a>
+
+          <a href="{{ url_for('editCategoryPage', category_name = category.name) }}" class="btn btn-secondary my-2">Edit Category</a>
+
         </p>
-      </div>
+
+        <!-- FLASH -->
+        <p>
+          {% with messages =  get_flashed_messages() %}
+              {% if messages %}
+              <ul>
+                  {% for message in messages %}
+                  <li><div class='alert-success'>{{ message }}</div></li>
+                  {% endfor %}
+              </ul>
+              {% endif %}
+          {% endwith %}
+        </p>
+        <!-- /FLASH -->
+      
     </section>
+  </div>
 
   <div class="album py-5 bg-light">
       <div class="container">

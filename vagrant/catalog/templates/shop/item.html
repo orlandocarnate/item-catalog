@@ -1,6 +1,6 @@
 {% extends "shop/layout.html" %}
 {% block content %}
-
+{% include "shop/navbar.html" %}
 
     <!-- Page Content -->
     <div class="container">
@@ -23,6 +23,21 @@
                   <a href='{{ url_for("deleteItem", category_name = category.name, item_id = item.id) }}' 
                     class="btn btn-sm btn-outline-secondary">Delete</a>
               </div>
+
+              <!-- FLASH -->
+              <p>
+                {% with messages =  get_flashed_messages() %}
+                    {% if messages %}
+                    <ul>
+                        {% for message in messages %}
+                        <li><div class='alert-warning'>{{ message }}</div></li>
+                        {% endfor %}
+                    </ul>
+                    {% endif %}
+                {% endwith %}
+              </p>
+              <!-- /FLASH -->
+              
             </div>
           </div>
           <!-- /.card -->

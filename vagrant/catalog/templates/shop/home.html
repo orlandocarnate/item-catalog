@@ -1,6 +1,6 @@
 {% extends "shop/layout.html" %}
 {% block content %}
-
+{% include "shop/navbar.html" %}
 
 <header>
         <!-- CAROUSEL -->
@@ -87,7 +87,12 @@
         
 
         <h1 class="my-4">Welcome to HaveMerci Jewelry!</h1>
-        <h4>Hi, {{ user_name }}!</h4>
+        <h4>Hello, {%if 'username' not in session %}
+                        Guest!
+                    {% else %}
+                    {{ user_name }}!
+                    {% endif %}
+        </h4>
 
             <!-- CATEGORIES WITH IMAGES -->
             <div class="row">
