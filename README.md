@@ -1,66 +1,40 @@
-# [Start Bootstrap - Shop Homepage](https://startbootstrap.com/template-overviews/shop-homepage/)
-
-[Shop Homepage](http://startbootstrap.com/template-overviews/shop-homepage/) is a basic HTML online store homepage template for [Bootstrap](http://getbootstrap.com/) created by [Start Bootstrap](http://startbootstrap.com/).
-
-## Preview
-
-[![Shop Homepage Preview](https://startbootstrap.com/assets/img/templates/shop-homepage.jpg)](https://blackrockdigital.github.io/startbootstrap-shop-homepage/)
-
-**[View Live Preview](https://blackrockdigital.github.io/startbootstrap-shop-homepage/)**
-
-## Status
-
-[![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/BlackrockDigital/startbootstrap-shop-homepage/master/LICENSE)
-[![npm version](https://img.shields.io/npm/v/startbootstrap-shop-homepage.svg)](https://www.npmjs.com/package/startbootstrap-shop-homepage)
-[![Build Status](https://travis-ci.org/BlackrockDigital/startbootstrap-shop-homepage.svg?branch=master)](https://travis-ci.org/BlackrockDigital/startbootstrap-shop-homepage)
-[![dependencies Status](https://david-dm.org/BlackrockDigital/startbootstrap-shop-homepage/status.svg)](https://david-dm.org/BlackrockDigital/startbootstrap-shop-homepage)
-[![devDependencies Status](https://david-dm.org/BlackrockDigital/startbootstrap-shop-homepage/dev-status.svg)](https://david-dm.org/BlackrockDigital/startbootstrap-shop-homepage?type=dev)
-
-## Download and Installation
-
-To begin using this template, choose one of the following options to get started:
-* [Download the latest release on Start Bootstrap](https://startbootstrap.com/template-overviews/shop-homepage/)
-* Install via npm: `npm i startbootstrap-shop-homepage`
-* Clone the repo: `git clone https://github.com/BlackrockDigital/startbootstrap-shop-homepage.git`
-* [Fork, Clone, or Download on GitHub](https://github.com/BlackrockDigital/startbootstrap-shop-homepage)
-
-## Usage
-
-### Basic Usage
-
-After downloading, simply edit the HTML and CSS files included with the template in your favorite text editor to make changes. These are the only files you need to worry about, you can ignore everything else! To preview the changes you make to the code, you can open the `index.html` file in your web browser.
-
-### Advanced Usage
-
-After installation, run `npm install` and then run `gulp dev` which will open up a preview of the template in your default browser, watch for changes to core template files, and live reload the browser when changes are saved. You can view the `gulpfile.js` to see which tasks are included with the dev environment.
-
-You must have npm and Gulp installed globally on your machine in order to use these features.
-
-## Troubleshooting and Help
-
-Start Bootstrap has a public Slack channel which is a great place to ask questions about this template and all things related to Start Bootstrap.
-
-**[Click here to join the Slack channel!](https://startbootstrap-slack.herokuapp.com/)**
-
-## Bugs and Issues
-
-Have a bug or an issue with this template? [Open a new issue](https://github.com/BlackrockDigital/startbootstrap-shop-homepage/issues) here on GitHub or leave a comment on the [template overview page at Start Bootstrap](http://startbootstrap.com/template-overviews/shop-homepage/).
+# Catalog - Udacity
+### Full Stack Web Development ND
 
 ## About
+This is a Jewelry Catalog application that provides:
+* a list of items within a variety of categories
+* a user registration and authentication system
+* Registered users will have the ability to:
+    * CReate new items
+    * Update items
+    * Delete items
 
-Start Bootstrap is an open source library of free Bootstrap templates and themes. All of the free templates and themes on Start Bootstrap are released under the MIT license, which means you can use them for any purpose, even for commercial projects.
+## Getting Started
+These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
 
-* https://startbootstrap.com
-* https://twitter.com/SBootstrap
+### Prerequisites
+You will need to install these software:
+* Download and Install **[Python 3](https://www.python.org/downloads/)**
+* Download and Install **[Vagrant](https://www.vagrantup.com/downloads.html)**
+* Download and Install **[VirtualBox 3](https://www.virtualbox.org/wiki/Downloads)**
+* Clone or Download the Github repository at 
+    **(https://github.com/orlandocarnate/fullstack-nanodegree-vm)** 
+    in your vagrant folder.
 
-Start Bootstrap was created by and is maintained by **[David Miller](http://davidmiller.io/)**, Owner of [Blackrock Digital](http://blackrockdigital.io/).
 
-* http://davidmiller.io
-* https://twitter.com/davidmillerskt
-* https://github.com/davidtmiller
+## Start the virtual machine
+From your terminal, inside the *vagrant* subdirectory, run the command `vagrant up`. This will cause Vagrant to download the Linux operating system and install it. When `vagrant up` is finished running, you will get your shell prompt back. At this point, you can run `vagrant ssh` to log in to your newly installed Linux VM. If the shell prompt starts with the word `vagrant` then you are loggied into Linux VM.
 
-Start Bootstrap is based on the [Bootstrap](http://getbootstrap.com/) framework created by [Mark Otto](https://twitter.com/mdo) and [Jacob Thorton](https://twitter.com/fat).
+## Run the Python Web Server
+Make sure you're in the `vagrant/catalog` folder within the Linux VM terminal. Enter 'ls' to see a list of items within the vagrant folder. You should see `project.py`.
 
-## Copyright and License
+In the Linux VM terminal run this command:
+`python project.py`
 
-Copyright 2013-2018 Blackrock Digital LLC. Code released under the [MIT](https://github.com/BlackrockDigital/startbootstrap-shop-homepage/blob/gh-pages/LICENSE) license.
+## Template Style with Bootstrap
+I probably spent half the time researching Bootstrap for my Flask templates. Below are some of the sites I have been researhing:
+* **[GetBootstrap.com Examples](http://getbootstrap.com/docs/4.1/examples/)**
+* **[Tooplate.com Shelf Template](https://www.tooplate.com/live/2092-shelf)**
+* **[W3schools.com Clothing Store Template](https://www.w3schools.com/w3css/tryw3css_templates_clothing_store.htm)**
+* **[Startbootstrap.com Shop Homepage Template](https://startbootstrap.com/template-overviews/shop-homepage/)**
