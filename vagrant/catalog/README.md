@@ -32,6 +32,10 @@ Make sure you're in the `vagrant/catalog` folder within the Linux VM terminal. E
 In the Linux VM terminal run this command:
 `python project.py`
 
+## Log In using Google or Facebook
+If you have a Google or Facebook account you can click on the login button on the top right Nav Bar. This will take you to the OAUTH page. After successfully logging in you will be able to createm edit or delete items or modify the Category description. The login button will change into a log
+
+
 ## Template Style with Bootstrap
 I probably spent half the time researching Bootstrap for my Flask templates. Below are some of the sites I have been researhing:
 * **[GetBootstrap.com Examples](http://getbootstrap.com/docs/4.1/examples/)**
