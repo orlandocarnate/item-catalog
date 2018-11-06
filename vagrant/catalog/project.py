@@ -48,19 +48,26 @@ ALLOWED_EXTENSIONS = set(['jpg', 'jpeg', 'png', 'gif'])
 def home():
     # If not logged in return PUBLIC page that shows LOGIN link
     if 'username' not in login_session:
-        return render_template('shop/home.html', categories = categories)
+        return render_template('shop/home.html', 
+                                categories = categories)
     else:
         user_name = login_session['username']
-        return render_template('shop/home.html', categories = categories, user_name = user_name)
+        return render_template('shop/home.html', 
+                                categories = categories, 
+                                user_name = user_name)
 
 # Login
 @app.route("/login")
 def showLogin():
-    state = ''.join(random.choice(string.ascii_uppercase + string.digits)
+    state = ''.join(random.choice(string.ascii_uppercase + 
+                                  string.digits)
         for x in xrange(32))
     login_session['state'] = state
     # return "API key is " + apikey + "The current session state is %s" % login_session['state']
-    return render_template('shop/login.html', STATE=state, apikey = CLIENT_ID, FB_apikey=FB_ID)
+    return render_template('shop/login.html', 
+                            STATE=state, 
+                            apikey = CLIENT_ID, 
+                            FB_apikey=FB_ID)
 
 # GCONNECT
 @app.route("/gconnect", methods=['POST'])
@@ -75,7 +82,8 @@ def gconnect():
 
     try:
         # Upgrade the authorization code into a credentials object
-        oauth_flow = flow_from_clientsecrets('client_secret.json', scope='')
+        oauth_flow = flow_from_clientsecrets('client_secret.json', 
+                                              scope='')
         oauth_flow.redirect_uri = 'postmessage'
         credentials = oauth_flow.step2_exchange(code)
     except FlowExchangeError:
@@ -86,7 +94,8 @@ def gconnect():
 
     # Check that the access token is valid.
     access_token = credentials.access_token
-    url = ('https://www.googleapis.com/oauth2/v1/tokeninfo?access_token=%s' % access_token)
+    url = ('https://www.googleapis.com/oauth2/v1/tokeninfo?access_token=%s' 
+            % access_token)
     h = httplib2.Http()
     result = json.loads(h.request(url, 'GET')[1])
 
@@ -148,7 +157,9 @@ def gconnect():
     output += '!</h1>'
     output += '<img src="'
     output += login_session['picture']
-    output += ' " style = "width: 300px; height: 300px;border-radius: 150px;-webkit-border-radius: 150px;-moz-border-radius: 150px;"> '
+    output += ' " style = "width: 300px; height: 300px; '
+    output += 'border-radius: 150px;-webkit-border-radius: 150px;'
+    output += '-moz-border-radius: 150px;"> '
     flash("you are now logged in as %s" % login_session['username'])
     print "done!"
     return output
@@ -190,8 +201,7 @@ def fbconnect():
     app_id = json.loads(open('fb_client_secret.json', 'r').read())['web']['app_id']
     app_secret = json.loads(
         open('fb_client_secret.json', 'r').read())['web']['app_secret']
-    url = 'https://graph.facebook.com/oauth/access_token?grant_type=fb_exchange_token&client_id=%s&client_secret=%s&fb_exchange_token=%s' % (
-        app_id, app_secret, access_token)
+    url = "https://graph.facebook.com/oauth/access_token?grant_type=fb_exchange_token&client_id=%s&client_secret=%s&fb_exchange_token=%s" % (app_id, app_secret, access_token)
     h = httplib2.Http()
     result = h.request(url, 'GET')[1]
 
@@ -242,7 +252,8 @@ def fbconnect():
     output += '!</h1>'
     output += '<img src="'
     output += login_session['picture']
-    output += ' " style = "width: 300px; height: 300px;border-radius: 150px;-webkit-border-radius: 150px;-moz-border-radius: 150px;"> '
+    output += ' " style = "width: 300px; height: 300px;border-radius: 150px;'
+    output += '-webkit-border-radius: 150px;-moz-border-radius: 150px;"> '
 
     flash("Now logged in as %s" % login_session['username'])
     return output
@@ -374,10 +385,17 @@ def itemPage(category_name, item_id):
     category_id = item.category_id
     category = session.query(Category).filter_by(id = category_id).one()
     if 'username' not in login_session:
-        return render_template('shop/publicitem.html', item = item, category = category)
+        return render_template('shop/publicitem.html', 
+                                item = item, 
+                                category = category, 
+                                categories = categories)
     else:
         user_name = login_session['username']
-        return render_template('shop/item.html', user_name = user_name,  item = item, category = category)
+        return render_template('shop/item.html', 
+                                user_name = user_name,  
+                                item = item, 
+                                category = category, 
+                                categories = categories)
 
 # NEW ITEM
 @app.route("/<string:category_name>/new/", methods=['GET','POST'])
@@ -410,7 +428,9 @@ def editItem(category_name, item_id):
     # Only Creator can edit.
     if editJewelryItem.user_id != login_session['user_id']:
         flash('Only the creator of this item can edit. You must create your own Jewelry item to edit.')
-        return redirect(url_for('itemPage', category_name = category_name, item_id = item_id))
+        return redirect(url_for('itemPage', 
+                                category_name = category_name, 
+                                item_id = item_id))
     
     if request.method == 'POST':
         if request.form['name']:
@@ -428,7 +448,12 @@ def editItem(category_name, item_id):
     else:
         user_name = login_session['username']
         product_images = os.listdir("static/img/items/")
-        return render_template('shop/edititem.html', user_name = user_name, category_name = category_name, item = editJewelryItem, product_images = product_images)
+        category = session.query(Category).filter_by(name = category_name).one()
+        return render_template('shop/edititem.html', 
+                                user_name = user_name, 
+                                category = category, 
+                                item = editJewelryItem, 
+                                product_images = product_images)
 
 # DELETE ITEM
 @app.route("/<string:category_name>/<int:item_id>/delete", methods=['GET','POST'])
@@ -438,17 +463,23 @@ def deleteItem(category_name, item_id):
     deleteItem = session.query(Jewelry).filter_by(id = item_id).one()
     if deleteItem.user_id != login_session['user_id']:
         flash('Only the creator of this item can delete this.')
-        return redirect(url_for('itemPage', category_name = category_name, item_id = item_id))
+        return redirect(url_for('itemPage', 
+                                category_name = category_name, 
+                                item_id = item_id))
     category_id = deleteItem.category_id
     category = session.query(Category).filter_by(id = category_id).one()
     if request.method == 'POST':
         session.delete(deleteItem)
         session.commit()
         flash('%s has been deleted!' % deleteItem.name)
-        return redirect(url_for('categoryPage', category_name = category.name))
+        return redirect(url_for('categoryPage', 
+                                 category_name = category.name))
     else:
         user_name = login_session['username']
-        return render_template('shop/deleteitem.html', user_name = user_name, category_name = category_name, item = deleteItem)
+        return render_template('shop/deleteitem.html', 
+                                user_name = user_name, 
+                                category = category, 
+                                item = deleteItem)
 
 # UPLOAD IMAGE TEST PAGE
 @app.route("/upload/")
@@ -477,10 +508,12 @@ def uploadImage():
 @app.route("/about")
 def aboutPage():
     if 'username' not in login_session:
-        return render_template('publicabout.html', categories = categories)
+        return render_template('publicabout.html', 
+                                categories = categories)
     else:
         user_name = login_session['username']
-        return render_template('shop/about.html', user_name = user_name)
+        return render_template('shop/about.html', 
+                                user_name = user_name)
 
 
 if __name__ == '__main__':

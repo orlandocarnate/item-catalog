@@ -1,29 +1,38 @@
-{% extends "shop/publiclayout.html" %}
+{% extends "shop/layout.html" %}
 {% block content %}
+{% include "shop/navbar.html" %}
 
     <!-- Page Content -->
     <div class="container">
+        <a class="breadcrumb" href="{{ url_for('categoryPage', category_name = category.name) }}">Return to {{ category.name }}</a>
+          <div class="card mt-4">
+            <img class="card-img-top" src="{{ url_for('static',filename='img/items/' + item.product_image) }}" alt="">
+            <div class="card-body">
+              <h3 class="card-title">{{ item.name }}</h3>
+              <h5>{{ item.price }}</h5></br>
+              <h4>Description:</h4>
+              <p class="card-text">{{ item.description }}</p>
 
-      <div class="card mt-4">
-        <img class="card-img-top" src="{{ url_for('static',filename='img/items/' + item.product_image) }}" alt="">
-        <div class="card-body">
-          <h3 class="card-title">{{ item.name }}</h3>
-          <h5>{{ item.price }}</h5></br>
-          <h4>Description:</h4>
-          <p class="card-text">{{ item.description }}</p>
-          <!-- Star Rating NOT USED
-            <span class="text-warning">&#9733; &#9733; &#9733; &#9733; &#9734;</span>
-            4.0 stars
-         -->
-          </br></br>
+              <!-- FLASH -->
+              <p>
+                {% with messages =  get_flashed_messages() %}
+                    {% if messages %}
+                    <ul>
+                        {% for message in messages %}
+                        <li><div class='alert-warning'>{{ message }}</div></li>
+                        {% endfor %}
+                    </ul>
+                    {% endif %}
+                {% endwith %}
+              </p>
+              <!-- /FLASH -->
+              
+            </div>
+          </div>
+          <!-- /.card -->
 
-        </div>
-      </div>
-      <!-- /.card -->
 
-
-</div>
-<!-- /.container -->
-
+    </div>
+    <!-- /.container -->
 
 {% endblock content %}

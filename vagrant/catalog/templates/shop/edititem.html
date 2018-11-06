@@ -3,9 +3,11 @@
 {% include "shop/navbar.html" %}
 
 <div class="container">
+        <a class="breadcrumb" href="{{ url_for('categoryPage', category_name = category.name) }}">Return to {{ category.name }}</a>
+
         <h1>Edit {{ item.name }}</h1>
 
-        <form action="{{ url_for('editItem', category_name = category_name, item_id = item.id) }}", method='post'>
+        <form action="{{ url_for('editItem', category_name = category.name, item_id = item.id) }}", method='post'>
             
 
             <div class="card">
@@ -28,7 +30,10 @@
                             <div class="select">
                                 <select name="product_image">
                                 {% for product_image in product_images %}
-                                    <option value ='{{ product_image }}'>{{ product_image }}</option>
+                                    <option value ='{{ product_image }}'
+                                    {% if product_image == item.product_image %} 
+                                        {{ "selected='selected'"}} 
+                                    {% endif %}>{{ product_image }}</option>
                                 {% endfor %}
                                 </select>
                             </div>
@@ -37,7 +42,7 @@
                         <!-- SUBMIT SECTION -->
                         <div class="form-group">
                             <input class="btn btn-sm btn-outline-primary" type='submit' value='Submit Changes' >
-                            <a class="btn btn-sm btn-outline-secondary" href='{{ url_for('itemPage', category_name = category_name, item_id = item.id) }}'>Cancel</a>
+                            <a class="btn btn-sm btn-outline-secondary" href='{{ url_for('itemPage', category_name = category.name, item_id = item.id) }}'>Cancel</a>
                         </div>
 
                     </div>

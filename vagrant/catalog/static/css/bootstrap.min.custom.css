@@ -541,7 +541,7 @@ pre code {
     }
 }
 
-
+/*
 @media (min-width:992px) {
     .container {
         max-width: 960px
@@ -554,7 +554,7 @@ pre code {
         max-width: 1140px
     }
 }
-
+*/
 
 .container-fluid {
     width: 100%;

@@ -1,13 +1,15 @@
 {% extends "shop/layout.html" %}
 {% block content %}
+{% include "shop/navbar.html" %}
 
 <div class="container">
+        <a class="breadcrumb" href="{{ url_for('categoryPage', category_name = category.name) }}">Return to {{ category.name }}</a>
         <h1>You are about to Delete {{ item.name }}!!!</h1>
 
-        <form action="{{ url_for('deleteItem', category_name = category_name, item_id = item.id) }}", method='post'>
+        <form action="{{ url_for('deleteItem', category_name = category.name, item_id = item.id) }}", method='post'>
             <p>Are you sure you want to delete {{ item.name }}?</p>
             <input type='submit' value='Delete'>
-            <a href='{{ url_for('itemPage', category_name = category_name, item_id = item.id) }}'>Cancel</a>
+            <a href='{{ url_for('itemPage', category_name = category.name, item_id = item.id) }}'>Cancel</a>
         </form>
 </div>
 {% endblock content %}

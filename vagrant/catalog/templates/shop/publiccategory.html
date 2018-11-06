@@ -1,11 +1,13 @@
-{% extends "shop/publiclayout.html" %}
+{% extends "shop/layout.html" %}
 {% block content %}
+{% include "shop/navbar.html" %}
 
 <main role="main">
-  <section class="jumbotron text-center">
-      <div class="container">
-        <h1 class="jumbotron-heading">{{ category.name }}</h1>
-        <p class="lead text-muted">{{ category.description }}</p>
+  <div class="container">
+      <a class="breadcrumb" href="{{ url_for('home') }}">Return to All Categories</a>
+      <section class="jumbotron text-center" style="background-image: url('{{ url_for('static',filename='img/categories/' + category.category_image) }}')">
+        <h1 class="jumbotron-heading text-white">{{ category.name }}</h1>
+        <p class="lead text-white">{{ category.description }}</p>
         
       </div>
     </section>

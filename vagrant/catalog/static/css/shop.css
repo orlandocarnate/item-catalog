@@ -1,0 +1,40 @@
+body {
+    padding-top: 54px;
+  }
+  
+@media (min-width: 992px) {
+  body {
+    padding-top: 56px;
+  }
+}
+
+.carousel-item {
+  height: 65vh;
+  min-height: 300px;
+  background: no-repeat center center scroll;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+}
+
+.portfolio-item {
+  margin-bottom: 30px;
+}
+
+.card-img-top {
+  width: 100%;
+  border-top-left-radius: calc(.25rem - 1px);
+  border-top-right-radius: calc(.25rem - 1px)
+}
+
+.ratio{
+  position:relative;
+  width: 50%;
+  height: 0;
+  padding-bottom: 50% ; /* % of width, defines aspect ratio*/
+  
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: cover;  
+}

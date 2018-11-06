@@ -4,6 +4,7 @@
 
     <!-- Page Content -->
     <div class="container">
+        <a class="breadcrumb" href="{{ url_for('categoryPage', category_name = category.name) }}">Return to {{ category.name }}</a>
 
           <div class="card mt-4">
             <img class="card-img-top" src="{{ url_for('static',filename='img/items/' + item.product_image) }}" alt="">
