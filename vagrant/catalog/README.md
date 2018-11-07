@@ -21,6 +21,9 @@ You will need to install these software:
 * Clone or Download the Github repository at 
     **(https://github.com/orlandocarnate/fullstack-nanodegree-vm)** 
     in your vagrant folder.
+* You will need to provide your own `client_secrets` for the Google API ad Facebook API
+* Create and download your Google API key at **[Google Developers](https://developers.google.com/)**
+* Create and download your Facebook API key at **[Facebook for Developers](https://developers.facebook.com/)**
 
 
 ## Start the virtual machine

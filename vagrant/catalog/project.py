@@ -2,7 +2,7 @@
 from flask import Flask, render_template, request, redirect, url_for, flash, app, jsonify
 from sqlalchemy import create_engine, asc
 from sqlalchemy.orm import sessionmaker
-import os
+import os, logging
 
 # OAUTH Imports
 from flask import session as login_session
@@ -26,7 +26,8 @@ APPLICATION_NAME = "jewelry catalog"
 app = Flask(__name__)
 
 # DB connection
-engine = create_engine('sqlite:///catalogwithusers.db', connect_args={'check_same_thread': False})
+engine = create_engine('sqlite:///catalogwithusers.db', echo=True, connect_args={'check_same_thread': False})
+# engine = create_engine('sqlite:///catalogwithusers.db')
 Base.metadata.bind = engine
 
 DBSession = sessionmaker(bind=engine)
@@ -41,6 +42,12 @@ ALLOWED_EXTENSIONS = set(['jpg', 'jpeg', 'png', 'gif'])
 
 
 # ---------- app.routes here ----------
+
+# ERROR HANDLER PAGE
+@app.errorhandler(404)
+@app.errorhandler(500)
+def page_not_found(e):
+    return render_template("shop/404.html"), 404
 
 # HOME - All Categories Page
 @app.route("/")
@@ -328,7 +335,7 @@ def homeJSON():
 @app.route('/<string:category_name>/json')
 def categoryJSON(category_name):
     category_name = category_name.title()
-    category = session.query(Category).filter_by(name = category_name).one()
+    category = session.query(Category).filter_by(name = category_name).first()
     items = session.query(Jewelry).filter_by(
         category_id=category.id).all()
     return jsonify(Jewelry=[i.serialize for i in items])
@@ -337,7 +344,7 @@ def categoryJSON(category_name):
 @app.route('/<string:category_name>/<int:item_id>/JSON')
 @app.route('/<string:category_name>/<int:item_id>/json')
 def itemJSON(category_name, item_id):
-    item = session.query(Jewelry).filter_by(id = item_id).one()
+    item = session.query(Jewelry).filter_by(id = item_id).first()
     return jsonify(Jewelry=item.serialize)
 
 # Single Category - All Items; Category Image
@@ -345,7 +352,7 @@ def itemJSON(category_name, item_id):
 @app.route("/<string:category_name>/")
 def categoryPage(category_name):
     category_name = category_name.title()
-    category = session.query(Category).filter_by(name = category_name).one()
+    category = session.query(Category).filter_by(name = category_name).first()
     items = session.query(Jewelry).filter_by(category = category)
     if 'username' not in login_session:
         return render_template('shop/publiccategory.html', category = category, items = items, categories = categories)
@@ -360,7 +367,7 @@ def categoryPage(category_name):
 def editCategoryPage(category_name):
     if 'username' not in login_session:
         return redirect('/login')
-    editCategory = session.query(Category).filter_by(name = category_name).one()
+    editCategory = session.query(Category).filter_by(name = category_name).first()
     if request.method == 'POST':
         if request.form['name']:
             editCategory.name = request.form['name']
@@ -381,9 +388,9 @@ def editCategoryPage(category_name):
 # VIEW Single Item - Single; Item Image
 @app.route("/<string:category_name>/<int:item_id>/")
 def itemPage(category_name, item_id):
-    item = session.query(Jewelry).filter_by(id = item_id).one()
+    item = session.query(Jewelry).filter_by(id = item_id).first()
     category_id = item.category_id
-    category = session.query(Category).filter_by(id = category_id).one()
+    category = session.query(Category).filter_by(id = category_id).first()
     if 'username' not in login_session:
         return render_template('shop/publicitem.html', 
                                 item = item, 
@@ -401,9 +408,9 @@ def itemPage(category_name, item_id):
 @app.route("/<string:category_name>/new/", methods=['GET','POST'])
 def newItem(category_name):
     category_name = category_name.title()
-    current_category = session.query(Category).filter_by(name = category_name).one()
+    current_category = session.query(Category).filter_by(name = category_name).first()
     if request.method == 'POST':
-        new_category = session.query(Category).filter_by(name = request.form['category']).one()
+        new_category = session.query(Category).filter_by(name = request.form['category']).first()
         newJewelryItem = Jewelry(
                             name=request.form['name'], 
                             price=request.form['price'], 
@@ -424,7 +431,7 @@ def newItem(category_name):
 def editItem(category_name, item_id):
     if 'username' not in login_session:
         return redirect('/login')
-    editJewelryItem = session.query(Jewelry).filter_by(id = item_id).one()
+    editJewelryItem = session.query(Jewelry).filter_by(id = item_id).first()
     # Only Creator can edit.
     if editJewelryItem.user_id != login_session['user_id']:
         flash('Only the creator of this item can edit. You must create your own Jewelry item to edit.')
@@ -448,7 +455,7 @@ def editItem(category_name, item_id):
     else:
         user_name = login_session['username']
         product_images = os.listdir("static/img/items/")
-        category = session.query(Category).filter_by(name = category_name).one()
+        category = session.query(Category).filter_by(name = category_name).first()
         return render_template('shop/edititem.html', 
                                 user_name = user_name, 
                                 category = category, 
@@ -460,14 +467,14 @@ def editItem(category_name, item_id):
 def deleteItem(category_name, item_id):
     if 'username' not in login_session:
         return redirect('/login')
-    deleteItem = session.query(Jewelry).filter_by(id = item_id).one()
+    deleteItem = session.query(Jewelry).filter_by(id = item_id).first()
     if deleteItem.user_id != login_session['user_id']:
         flash('Only the creator of this item can delete this.')
         return redirect(url_for('itemPage', 
                                 category_name = category_name, 
                                 item_id = item_id))
     category_id = deleteItem.category_id
-    category = session.query(Category).filter_by(id = category_id).one()
+    category = session.query(Category).filter_by(id = category_id).first()
     if request.method == 'POST':
         session.delete(deleteItem)
         session.commit()
