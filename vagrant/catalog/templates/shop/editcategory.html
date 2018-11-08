@@ -8,12 +8,8 @@
         <form action="{{ url_for('editCategoryPage', category_name = category.name) }}", method='post'>
 
             <div class="form-group">
-                <p>Name:</p>
-                <input type='text' size='30' name='name' value='{{ category.name }}'>
-            </div>
-            <div class="form-group">
                 <p>Description:</p>
-                <textarea cols='40' rows='4' name='description'>{{ category.description }}</textarea>
+                <textarea cols='40' rows='4' name='description' required>{{ category.description }}</textarea>
             </div>
 
             <div class="form-group">
@@ -23,7 +19,7 @@
                     {% for category_image in category_images %}
                         <option value ='{{ category_image }}'
                         {% if category_image == category.category_image %} 
-                            {{ "selected='selected'"}} 
+                            {{ "selected='selected'" }} 
                         {% endif %}>{{ category_image }}</option>
                     {% endfor %}
                     </select>

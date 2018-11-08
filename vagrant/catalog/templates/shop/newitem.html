@@ -9,11 +9,11 @@
         <form action="{{ url_for('newItem', category_name=current_category.name) }}" method='post'>
             <div class='form-group'>
                 <p>Name:</p>
-                <input type='text' size='30' name='name'>
+                <input type='text' size='30' name='name' required>
                 <p>Price:</p>
-                <input type='text' size='8' name='price'>
+                <input type='text' size='8' name='price' required>
                 <p>Description:</p>
-                <textarea cols='40' rows='4' name='description'></textarea>
+                <textarea cols='40' rows='4' name='description' required></textarea>
             </div>
 
             <div class="form-group radio">

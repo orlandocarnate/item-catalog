@@ -2,13 +2,15 @@
 ### Full Stack Web Development ND
 
 ## About
-This is a Jewelry Catalog application that provides:
+A long time ago I created a static jewelry website for my sister-in-law and I thought I could apply what I learned and create a data-driven site with CRUD functions using Python, Flask, SQLAlchemy, and Bootstrap.
+This is Jewelry Catalog application provides:
 * a list of items within a variety of categories
 * a user registration and authentication system
 * Registered users will have the ability to:
     * CReate new items
     * Update items
     * Delete items
+* Only the original creator of an item can edit or delete it.
 
 ## Getting Started
 These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
