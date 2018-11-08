@@ -15,7 +15,7 @@
             <div class="form-group">
                 <p>Category Image:</p>
                 <div class="select">
-                    <select name="category_image">
+                    <select name="category_image" required>
                     {% for category_image in category_images %}
                         <option value ='{{ category_image }}'
                         {% if category_image == category.category_image %} 

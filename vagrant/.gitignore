@@ -2,7 +2,7 @@ __pycache__
 *.pyc
 .vagrant
 catalog/apikeys.py
-catalog/client_secret.json
-catalog/fb_client_secret.json
+catalog/client_secrets.json
+catalog/fb_client_secrets.json
 catalog/static/ignore
 catalog/templates/old_template
