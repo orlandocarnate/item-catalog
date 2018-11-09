@@ -1,7 +1,7 @@
-### CONFIGURATION ###
+# CONFIGURATION
 import os
 import sys
-from sqlalchemy import Column, ForeignKey, Integer, String
+from sqlalchemy import Column, ForeignKey, Integer, String, Numeric
 # for configuration and class code
 from sqlalchemy.ext.declarative import declarative_base
 # import to create Foreign Key relationship
@@ -9,16 +9,19 @@ from sqlalchemy.orm import relationship
 # used for configuratiion code at end of file
 from sqlalchemy import create_engine
 
-# instance of delcarative Base class to let SQLAlchemy know that our classes are special classes to create tables
+# instance of delcarative Base class to let SQLAlchemy know that our classes
+# are special classes to create tables
 Base = declarative_base()
 
-### CLASS CODE ###
+
+# CLASS CODE
 class User(Base):
     __tablename__ = 'user'
     id = Column(Integer, primary_key=True)
     name = Column(String(80), nullable=False)
     email = Column(String(80), nullable=False)
     picture = Column(String(250))
+
 
 class Category(Base):
     # Assign TABLE Name
@@ -31,7 +34,7 @@ class Category(Base):
     category_image = Column(String(80), nullable=False, default="700x400.png")
     user_id = Column(Integer, ForeignKey('user.id'))
     user = relationship(User)
-    
+
     # JSON Configuration
     @property
     def serialize(self):
@@ -41,6 +44,7 @@ class Category(Base):
             'name': self.name,
         }
 
+
 class Jewelry(Base):
     # Assign TABLE name
     __tablename__ = 'jewelry'
@@ -49,14 +53,14 @@ class Jewelry(Base):
     id = Column(Integer, primary_key=True)
     name = Column(String(80), nullable=False)
     description = Column(String(250))
-    status = Column(String(80)) # New item, on sale, etc
-    price = Column(String(8))
+    status = Column(String(80))  # New item, on sale, etc
+    price = Column(Numeric(5, 2))
     product_image = Column(String(80), nullable=False, default="default.jpg")
 
     # specify FOREIGN KEY ID
     category_id = Column(Integer, ForeignKey('category.id'))
 
-    #Establish relationship with other table
+    # Establish relationship with other table
     category = relationship(Category)
 
     user_id = Column(Integer, ForeignKey('user.id'))
@@ -74,7 +78,7 @@ class Jewelry(Base):
         }
 
 
-### Ending CONFIGURATION ###
+# Ending CONFIGURATION
 
 # create an engine that stores data in the local
 # directory's 'catalog.db' file

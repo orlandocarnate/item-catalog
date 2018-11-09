@@ -1,39 +1,60 @@
 {% extends "shop/layout.html" %}
 {% block content %}
-
+{% include "shop/navbar.html" %}
 
 <div class="container">
-        <h1>New Item for the {{ current_category.name }} category.</h1>
-        
-        
-        <form action="{{ url_for('newItem', category_name=current_category.name) }}" method='post'>
-            <div class='form-group'>
-                <p>Name:</p>
-                <input type='text' size='30' name='name' required>
-                <p>Price:</p>
-                <input type='text' size='8' name='price' required>
-                <p>Description:</p>
-                <textarea cols='40' rows='4' name='description' required></textarea>
-            </div>
+    <a class="breadcrumb" href="{{ url_for('categoryPage', category_name = current_category.name) }}">Return to {{ current_category.name }}</a>
+    <h1>New Item for the {{ current_category.name }} category.</h1>
+    
+    
+    <form action="{{ url_for('newItem', category_name=current_category.name) }}" method='post'>
+        <div class='form-group'>
+            <label>Name:</label>
+            <input type='text' class="form-control" size='30' name='name' required></br>
+            <label>Price:</label>
+            <input type='number' class="form-control" size='8' name='price' min='0' max='1000' step='0.01' required>
+            <label>Description:</label></br>
+            <textarea cols='40' rows='4' name='description' class="form-control" required></textarea>
+        </div>
 
-            <div class="form-group radio">
-                    <p>Category:</p>
-                    {% for category in categories %}
-                        <input type ='radio' name='category' value ='{{ category.name }}' 
-                        {% if current_category.name == category.name %} 
-                            {{ "checked='checked'"}} 
-                        {% endif %}>{{category.name}}</br>
-                    {% endfor %}
+        <!-- SELECT PRODUCT CATEGORY
+        <div class="form-group">
+            <label>Category:</label>
+            <div class="form-control">
+                <select name="category" required>
+                {% for category in categories %}
+                    <option value ='{{ category.name }}'
+                    {% if current_category.name == category.name %} 
+                        {{ "selected='selected'"}} 
+                    {% endif %}>{{ category.name }}</option>
+                {% endfor %}
+                </select>
             </div>
+        </div>
+        -->
 
+        <div class="form-group">
+                <p>Category:</p>
+                {% for category in categories %}
+                <div class='form-check form-check-inline'>
+                    <input type ='radio' name='category' class='form-check-input' value ='{{ category.name }}' 
+                    {% if current_category.name == category.name %} 
+                        {{ "checked='checked'" }} 
+                    {% endif %} required>
+                    <label class='form-check-label'>{{category.name}}</label>
+                </div>
+                {% endfor %}
+        </div>
+
+        <div class="form-group">
             <div class="btn-group">
-            <input class="btn btn-sm btn-outline-primary" type='submit' value='Create'>
-            <a class="btn btn-sm btn-outline-secondary" href='{{ url_for('categoryPage', category_name=current_category.name) }}'>Cancel</a>
-            
+                <input class="btn btn-sm btn-outline-primary" type='submit' value='Create'>
+                <a class="btn btn-sm btn-outline-secondary" href='{{ url_for('categoryPage', category_name=current_category.name) }}'>Cancel</a>
+                
             </div>
-
-            
-        </form>
-    </div>
+        </div>
+        
+    </form>
 </div>
+
 {% endblock content %}

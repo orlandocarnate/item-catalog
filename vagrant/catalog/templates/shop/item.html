@@ -10,7 +10,7 @@
             <img class="card-img-top" src="{{ url_for('static',filename='img/items/' + item.product_image) }}" alt="">
             <div class="card-body">
               <h3 class="card-title">{{ item.name }}</h3>
-              <h5>{{ item.price }}</h5></br>
+              <h5>${{ item.price }}</h5></br>
               <h4>Description:</h4>
               <p class="card-text">{{ item.description }}</p>
               <!-- Star Rating NOT USED

@@ -3,7 +3,7 @@
 {% include "shop/navbar.html" %}
 
 <div class="container">
-        <h1>Edit {{ category.name }}</h1>
+        <h1>Update {{ category.name }} Description</h1>
 
         <form action="{{ url_for('editCategoryPage', category_name = category.name) }}", method='post'>
 
@@ -12,6 +12,7 @@
                 <textarea cols='40' rows='4' name='description' required>{{ category.description }}</textarea>
             </div>
 
+        
             <div class="form-group">
                 <p>Category Image:</p>
                 <div class="select">
@@ -26,6 +27,7 @@
                 </div>
             </div>
         
+
             <!-- SUBMIT SECTION -->
 
             <div class="form-group">

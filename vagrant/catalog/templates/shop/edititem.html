@@ -16,19 +16,19 @@
                         
                         <!-- INPUT FIELD SECTION -->
                         <div class="form-group">
-                            <p>Name:</p>
-                                <input type='text' size='30' name='name' value='{{ item.name }}'>
-                            <p>Price:</p>
-                                <input type='text' size='8' name='price' value='{{ item.price }}'>
-                            <p>Description:</p>
-                                <textarea cols='40' rows='4' name='description'>{{ item.description }}</textarea>
+                            <label>Name:</label>
+                                <input type='text'  class="form-control"size='30' name='name' value='{{ item.name }}' required>
+                            <label>Price:</label>
+                                <input type='number'  class="form-control"size='8' name='price' value='{{ item.price }}' min='0' max='1000' step='0.01' required>
+                            <label>Description:</label>
+                                <textarea class="form-control" cols='40' rows='4' name='description' required>{{ item.description }}</textarea>
                         </div>
 
                         <!-- SELECT PRODUCT IMAGE -->
                         <div class="form-group">
                             <p>Product Image:</p>
                             <div class="select">
-                                <select name="product_image">
+                                <select name="product_image" required>
                                 {% for product_image in product_images %}
                                     <option value ='{{ product_image }}'
                                     {% if product_image == item.product_image %} 
