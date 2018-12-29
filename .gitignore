@@ -1,0 +1,7 @@
+__pycache__
+*.pyc
+.vagrant
+apikeys.py
+client_secrets.json
+fb_client_secrets.json
+templates/old_template
