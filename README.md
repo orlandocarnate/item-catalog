@@ -1,5 +1,5 @@
 # Catalog - Udacity
-### Full Stack Web Development ND
+Data-driven Item Catalog web app with CRUD functions using Python, Flask, SQLAlchemy, and Bootstrap.
 
 ## About
 A long time ago I created a static jewelry website for my sister-in-law and I thought I could apply what I learned and create a data-driven site with CRUD functions using Python, Flask, SQLAlchemy, and Bootstrap.
