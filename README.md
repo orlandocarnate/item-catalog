@@ -23,12 +23,14 @@ You will need to install these software:
 * Clone or Download the Github repository at 
     **(https://github.com/orlandocarnate/fullstack-nanodegree-vm)** 
     in your vagrant folder.
+* Packages to be installed using `pip install` command:
+    * Flask
+    * SQLAlchemy
 * You will need to provide your own `client_secrets` for the Google API ad Facebook API
 * Create and download your Google API key at **[Google Developers](https://developers.google.com/)**
     * Name your Google JSON file `client_secrets.json`
 * Create and download your Facebook API key at **[Facebook for Developers](https://developers.facebook.com/)**
     * Name your Facebook JSON file `fb_client_secrets.json`
-
 
 ## Start the virtual machine
 From your terminal, inside the *vagrant* subdirectory, run the command `vagrant up`. This will cause Vagrant to download the Linux operating system and install it. When `vagrant up` is finished running, you will get your shell prompt back. At this point, you can run `vagrant ssh` to log in to your newly installed Linux VM. If the shell prompt starts with the word `vagrant` then you are loggied into Linux VM.

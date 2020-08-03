@@ -1,6 +1,7 @@
 __pycache__
 *.pyc
 .vagrant
+.venv/
 apikeys.py
 client_secrets.json
 fb_client_secrets.json
