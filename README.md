@@ -26,6 +26,8 @@ You will need to install these software:
 * Packages to be installed using `pip install` command:
     * Flask
     * SQLAlchemy
+    * ~~oauth2client~~ Now deprecated. Update to [google-auth](https://google-auth.readthedocs.io/en/latest/)
+    * requests
 * You will need to provide your own `client_secrets` for the Google API ad Facebook API
 * Create and download your Google API key at **[Google Developers](https://developers.google.com/)**
     * Name your Google JSON file `client_secrets.json`
