@@ -24,8 +24,8 @@ You will need to install these software:
     **(https://github.com/orlandocarnate/fullstack-nanodegree-vm)** 
     in your vagrant folder.
 * Packages to be installed using `pip install` command:
-    * Flask
-    * SQLAlchemy
+    * [Flask](https://palletsprojects.com/p/flask/)
+    * [SQLAlchemy](https://www.sqlalchemy.org/)
     * ~~oauth2client~~ Now deprecated. Update to [google-auth](https://google-auth.readthedocs.io/en/latest/)
     * requests
 * You will need to provide your own `client_secrets` for the Google API ad Facebook API
